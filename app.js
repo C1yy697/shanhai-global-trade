@@ -2,6 +2,9 @@
   'use strict';
 
   const STORE_KEY = 'shanhai-global-trade-v1';
+  const APP_VERSION = '1.1';
+  const STORAGE_VERSION = 2;
+  const DOC_KEYS = ['testReport', 'originCert', 'marketLabel', 'qualityCert', 'coldChain'];
   const MARKET_RULES = [
     { id: 'jp-residue', market: '日本', category: '果蔬', name: '农残检测报告', detail: '批次应关联有效的农药残留检测报告。', field: 'testReport', required: true, source: '演示规则' },
     { id: 'jp-origin', market: '日本', category: '通用', name: '原产地证明', detail: '出口批次应关联原产地证明文件。', field: 'originCert', required: true, source: '演示规则' },
@@ -14,7 +17,7 @@
     { id: 'asean-label', market: '东南亚', category: '通用', name: '标签与语言资料', detail: '维护目的地要求的标签版本及语言信息。', field: 'marketLabel', required: true, source: '演示规则' }
   ];
   const seed = {
-    version: 1,
+    version: STORAGE_VERSION,
     batches: [
       { id: 'WZ-YM-26018', product: '温州杨梅', category: '果蔬', origin: '温州市瓯海区', target: '日本', quantity: '860 kg', created: '2026-10-15', status: '准备出运', docs: { testReport: true, originCert: true, marketLabel: false, qualityCert: false, coldChain: false }, events: [
         { type: '采收入库', time: '2026-10-12 08:40', actor: '瓯海果品合作社', note: '批次采收完成，完成入库抽检。' },
@@ -44,25 +47,65 @@
 
   const titles = { dashboard: '工作台', batches: '产品批次', compliance: '合规校验', trace: '追溯查询', rules: '市场规则', settings: '数据与设置' };
   let state = loadState();
-  let currentPage = 'dashboard';
+  let currentPage = pageFromHash();
   let selectedBatchId = state.batches[0]?.id || '';
   let searchTerm = '';
   let batchFilter = '全部状态';
   let marketFilter = '';
 
+  function clone(value) {
+    if (typeof structuredClone === 'function') return structuredClone(value);
+    return JSON.parse(JSON.stringify(value));
+  }
+
+  function normalizeBatch(batch) {
+    const item = batch && typeof batch === 'object' ? batch : {};
+    return {
+      id: String(item.id || '').trim(),
+      product: String(item.product || '').trim(),
+      category: item.category || '果蔬',
+      origin: String(item.origin || '').trim(),
+      target: item.target || '日本',
+      quantity: String(item.quantity || '').trim(),
+      created: item.created || new Date().toISOString().slice(0, 10),
+      status: item.status || '待补材料',
+      docs: Object.fromEntries(DOC_KEYS.map(key => [key, item.docs?.[key] === true])),
+      events: Array.isArray(item.events) ? item.events.filter(event => event && typeof event === 'object') : []
+    };
+  }
+
+  function normalizeState(parsed) {
+    if (!parsed || !Array.isArray(parsed.batches)) return clone(seed);
+    return {
+      version: STORAGE_VERSION,
+      batches: parsed.batches.map(normalizeBatch).filter(batch => batch.id),
+      enabledRules: { ...seed.enabledRules, ...(parsed.enabledRules || {}) }
+    };
+  }
+
   function loadState() {
     try {
       const raw = localStorage.getItem(STORE_KEY);
-      if (!raw) return structuredClone(seed);
+      if (!raw) return clone(seed);
       const parsed = JSON.parse(raw);
-      if (!parsed || parsed.version !== 1 || !Array.isArray(parsed.batches)) return structuredClone(seed);
-      return { ...structuredClone(seed), ...parsed, enabledRules: { ...seed.enabledRules, ...(parsed.enabledRules || {}) } };
-    } catch (_) { return structuredClone(seed); }
+      if (![1, STORAGE_VERSION].includes(parsed?.version)) return clone(seed);
+      return normalizeState(parsed);
+    } catch (_) { return clone(seed); }
   }
 
   function saveState() {
-    localStorage.setItem(STORE_KEY, JSON.stringify(state));
+    state.version = STORAGE_VERSION;
+    try {
+      localStorage.setItem(STORE_KEY, JSON.stringify(state));
+    } catch (_) {
+      toast('当前浏览器无法保存本地数据，请导出 JSON 备份');
+    }
     updateBatchCount();
+  }
+
+  function pageFromHash() {
+    const page = window.location.hash.replace(/^#/, '');
+    return titles[page] ? page : 'dashboard';
   }
 
   function esc(value) {
@@ -83,8 +126,9 @@
     if (el) el.textContent = state.batches.length;
   }
 
-  function setPage(page) {
+  function setPage(page, syncHash = true) {
     currentPage = titles[page] ? page : 'dashboard';
+    if (syncHash && window.location.hash !== `#${currentPage}`) window.history.replaceState(null, '', `#${currentPage}`);
     document.querySelectorAll('.nav-item[data-page]').forEach(b => b.classList.toggle('active', b.dataset.page === currentPage));
     document.getElementById('page-crumb').textContent = titles[currentPage];
     document.getElementById('sidebar').classList.remove('open');
@@ -218,7 +262,7 @@
     const bytes = new Blob([JSON.stringify(state)]).size;
     return `${pageHeading('数据与设置', '查看本地演示空间的数据保存方式及申报前注意事项。', '<button class="button" data-action="export-backup">⇩ 导出 JSON 备份</button>')}
       <section class="settings-grid"><article class="panel"><h2>本地数据</h2><p>批次和规则配置保存在当前浏览器的 localStorage 中，不会上传到服务器。不同浏览器或设备之间不会自动同步。</p><div class="source-note">当前记录：${state.batches.length} 个批次 · 数据体积约 ${Math.ceil(bytes / 1024)} KB</div><div style="margin-top:13px;display:flex;gap:8px"><button class="button" data-action="import-backup">导入 JSON</button><button class="button danger" data-action="clear-data">恢复演示数据</button><input type="file" id="import-file" accept="application/json" hidden></div></article>
-      <article class="panel"><h2>软件版本</h2><p><strong>山海鲜途·全球通农产品出海智能赋能平台 V1.0</strong><br>浏览器端单机演示版，采用 HTML、CSS 与原生 JavaScript 编写。适用于流程演示和源码审阅。</p><div class="source-note">本版本没有服务端账号体系、云端数据库、真实外贸接口或区块链存证。正式业务上线前需要安全、数据合规及规则内容评审。</div></article>
+      <article class="panel"><h2>软件版本</h2><p><strong>山海鲜途·全球通农产品出海智能赋能平台 V${APP_VERSION}</strong><br>浏览器端单机演示版，采用 HTML、CSS 与原生 JavaScript 编写。适用于流程演示和源码审阅。</p><div class="source-note">本版本没有服务端账号体系、云端数据库、真实外贸接口或区块链存证。正式业务上线前需要安全、数据合规及规则内容评审。</div></article>
       <article class="panel"><h2>著作权登记准备</h2><p>登记申请材料应与实际完成的软件版本一致。源码、说明书、版本信息、开发完成日期、权利人及开发者信息须依据真实情况确认。</p><button class="button" data-action="show-help">查看准备事项</button></article>
       <article class="panel"><h2>演示规则声明</h2><p>目标市场规则为演示数据，用于展示规则启停和批次资料检查。它们没有经过官方法规数据库校验，不应据此判断真实出口合规性。</p></article></section>`;
   }
@@ -237,9 +281,13 @@
     document.getElementById('batch-form').addEventListener('submit', e => {
       e.preventDefault();
       const form = new FormData(e.currentTarget);
-      const docs = Object.fromEntries(['testReport','originCert','marketLabel','qualityCert','coldChain'].map(k => [k, form.has(`doc-${k}`)]));
+      const docs = Object.fromEntries(DOC_KEYS.map(k => [k, form.has(`doc-${k}`)]));
       const saved = { id: String(form.get('id')).trim(), product: String(form.get('product')).trim(), category: form.get('category'), origin: String(form.get('origin')).trim(), target: form.get('target'), quantity: String(form.get('quantity')).trim(), created: editing ? b.created : new Date().toISOString().slice(0,10), status: '待补材料', docs, events: editing ? (b.events || []) : [] };
       const index = state.batches.findIndex(x => x.id === saved.id);
+      if (!editing && index >= 0) {
+        toast('批次编号已存在，请更换编号');
+        return;
+      }
       if (index >= 0) { state.batches[index] = { ...state.batches[index], ...saved }; toast('批次资料已更新'); }
       else { state.batches.unshift(saved); selectedBatchId = saved.id; toast('批次已创建'); }
       state.batches.forEach(x => { if (!evaluate(x).some(r => r.state !== 'ok') && x.status !== '已归档') x.status = '合规复核中'; });
@@ -260,7 +308,7 @@
 
   function exportCsv() {
     const rows = [['批次编号','产品','类别','产地','目标市场','数量','创建日期','状态','已登记资料'], ...state.batches.map(b => [b.id,b.product,b.category,b.origin,b.target,b.quantity,b.created,b.status,`${Object.values(b.docs || {}).filter(Boolean).length}/${Object.keys(b.docs || {}).length}`])];
-    const csv = '\ufeff' + rows.map(r => r.map(v => `"${String(v ?? '').replaceAll('"','""')}"`).join(',')).join('\r\n');
+    const csv = '\ufeff' + rows.map(r => r.map(v => `"${String(v ?? '').replace(/"/g, '""')}"`).join(',')).join('\r\n');
     download(csv, '山海鲜途_批次清单.csv', 'text/csv;charset=utf-8');
   }
 
@@ -273,7 +321,7 @@
   function exportBackup() { download(JSON.stringify(state, null, 2), '山海鲜途_数据备份.json', 'application/json'); toast('数据备份已导出'); }
 
   function showHelp() {
-    document.getElementById('modal-root').innerHTML = `<div class="modal-backdrop"><section class="modal" role="dialog" aria-modal="true"><div class="modal-header"><div><h2>平台说明</h2><p>山海鲜途·全球通农产品出海智能赋能平台 V1.0</p></div><button class="icon-button" data-action="close-modal" aria-label="关闭">×</button></div><div class="modal-body"><p style="font-size:11px;line-height:1.8;color:#59665f">本软件演示农产品出口批次管理、资料清单校验、市场规则启停及追溯事件记录。演示数据保存在当前浏览器，不会发送至服务器。</p><div class="source-note">页面内市场规则均为示例内容，不构成对真实出口合规要求的判断。本版本没有连接海关、跨境电商、物流、区块链或官方检测系统。</div><p style="font-size:10px;color:#7b8780;margin:13px 0 0">登记申请前请确认软件版本、著作权人、开发者、完成日期和源程序材料与实际情况一致。</p></div></section></div>`;
+    document.getElementById('modal-root').innerHTML = `<div class="modal-backdrop"><section class="modal" role="dialog" aria-modal="true"><div class="modal-header"><div><h2>平台说明</h2><p>山海鲜途·全球通农产品出海智能赋能平台 V${APP_VERSION}</p></div><button class="icon-button" data-action="close-modal" aria-label="关闭">×</button></div><div class="modal-body"><p style="font-size:11px;line-height:1.8;color:#59665f">本软件演示农产品出口批次管理、资料清单校验、市场规则启停及追溯事件记录。演示数据保存在当前浏览器，不会发送至服务器。</p><div class="source-note">页面内市场规则均为示例内容，不构成对真实出口合规要求的判断。本版本没有连接海关、跨境电商、物流、区块链或官方检测系统。</div><p style="font-size:10px;color:#7b8780;margin:13px 0 0">登记申请前请确认软件版本、著作权人、开发者、完成日期和源程序材料与实际情况一致。</p></div></section></div>`;
   }
 
   function handleAction(action, target) {
@@ -290,7 +338,7 @@
     else if (action === 'toggle-rule') { state.enabledRules[id] = state.enabledRules[id] === false; saveState(); render(); toast('规则状态已更新'); }
     else if (action === 'reset-rules') { state.enabledRules = { ...seed.enabledRules }; saveState(); render(); toast('规则已恢复为演示默认值'); }
     else if (action === 'show-help' || action === 'help-button') showHelp();
-    else if (action === 'clear-data') { state = structuredClone(seed); saveState(); render(); toast('已恢复演示数据'); }
+    else if (action === 'clear-data') { state = clone(seed); saveState(); render(); toast('已恢复演示数据'); }
     else if (action === 'import-backup') document.getElementById('import-file').click();
     else if (action === 'close-backdrop' && target.classList.contains('modal-backdrop')) document.getElementById('modal-root').innerHTML = '';
   }
@@ -317,8 +365,9 @@
       reader.onload = () => {
         try {
           const imported = JSON.parse(reader.result);
-          if (imported.version !== 1 || !Array.isArray(imported.batches)) throw new Error('文件格式不匹配');
-          state = { ...structuredClone(seed), ...imported, enabledRules: { ...seed.enabledRules, ...(imported.enabledRules || {}) } };
+          if (![1, STORAGE_VERSION].includes(imported?.version) || !Array.isArray(imported.batches)) throw new Error('文件格式不匹配');
+          if (imported.batches.length > 5000) throw new Error('批次数量超过 5000 条限制');
+          state = normalizeState(imported);
           saveState(); render(); toast('数据备份已导入');
         } catch (err) { toast(`导入失败：${err.message}`); }
         event.target.value = '';
@@ -351,6 +400,8 @@
     if (event.key === 'Escape') { document.getElementById('modal-root').innerHTML = ''; document.getElementById('sidebar').classList.remove('open'); }
   });
 
+  window.addEventListener('hashchange', () => setPage(pageFromHash(), false));
+
   updateBatchCount();
-  render();
+  setPage(currentPage, false);
 })();
