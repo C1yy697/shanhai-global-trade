@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f5f7f4">
+  <meta name="description" content="山海鲜途·全球通温州农产品出海智能赋能平台">
+  <title>山海鲜途·全球通 | 农产品出海协同平台</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar" id="sidebar">
+      <a class="brand" href="#dashboard" aria-label="山海鲜途全球通工作台">
+        <span class="brand-mark">山</span>
+        <span class="brand-copy"><strong>山海鲜途</strong><small>GLOBAL TRADE DESK</small></span>
+      </a>
+      <div class="workspace-label">工作空间</div>
+      <nav class="main-nav" aria-label="主导航">
+        <button class="nav-item active" data-page="dashboard"><span class="nav-glyph">⌂</span><span>工作台</span></button>
+        <button class="nav-item" data-page="batches"><span class="nav-glyph">▤</span><span>产品批次</span><span class="nav-count" id="batch-nav-count">0</span></button>
+        <button class="nav-item" data-page="compliance"><span class="nav-glyph">✓</span><span>合规校验</span></button>
+        <button class="nav-item" data-page="trace"><span class="nav-glyph">↗</span><span>追溯查询</span></button>
+        <button class="nav-item" data-page="rules"><span class="nav-glyph">≡</span><span>市场规则</span></button>
+      </nav>
+      <div class="sidebar-spacer"></div>
+      <div class="sidebar-note"><span class="status-dot"></span><span>本地演示空间</span></div>
+      <button class="nav-item settings-link" data-page="settings"><span class="nav-glyph">⚙</span><span>数据与设置</span></button>
+      <div class="user-block"><div class="avatar">温</div><div><strong>温州出海工作组</strong><small>企业工作区</small></div><button id="export-backup" class="icon-button" title="导出数据备份" aria-label="导出数据备份">⇩</button></div>
+    </aside>
+
+    <main class="main-area">
+      <header class="topbar">
+        <button class="icon-button mobile-menu" id="menu-toggle" title="打开导航" aria-label="打开导航">☰</button>
+        <div class="breadcrumbs"><span>山海鲜途</span><span class="crumb-divider">/</span><strong id="page-crumb">工作台</strong></div>
+        <div class="top-actions">
+          <label class="search-box"><span aria-hidden="true">⌕</span><input id="global-search" type="search" placeholder="搜索批次、产品或市场" aria-label="搜索批次、产品或市场"><kbd>⌘ K</kbd></label>
+          <button class="icon-button top-help" id="help-button" title="查看平台说明" aria-label="查看平台说明">?</button>
+          <div class="top-avatar">温</div>
+        </div>
+      </header>
+
+      <div class="page-content" id="page-content"></div>
+      <footer class="app-footer"><span>山海鲜途·全球通</span><span>出海业务协同 · V1.2 交易前台增强版</span><span class="demo-disclaimer">市场规则为演示数据，请以官方现行要求为准</span></footer>
+    </main>
+  </div>
+  <div id="modal-root"></div>
+  <div id="toast-root" class="toast-root" aria-live="polite"></div>
+  <script src="app.js"></script>
+</body>
+</html>

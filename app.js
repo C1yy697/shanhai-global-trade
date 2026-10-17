@@ -2,7 +2,7 @@
   'use strict';
 
   const STORE_KEY = 'shanhai-global-trade-v1';
-  const APP_VERSION = '1.1';
+  const APP_VERSION = '1.2';
   const STORAGE_VERSION = 2;
   const DOC_KEYS = ['testReport', 'originCert', 'marketLabel', 'qualityCert', 'coldChain'];
   const MARKET_RULES = [

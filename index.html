@@ -3,49 +3,36 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#f5f7f4">
-  <meta name="description" content="山海鲜途·全球通温州农产品出海智能赋能平台">
-  <title>山海鲜途·全球通 | 农产品出海协同平台</title>
-  <link rel="stylesheet" href="styles.css">
+  <meta name="theme-color" content="#f7f7f2">
+  <meta name="description" content="山海鲜途温州特色农产品展示与海外采购对接平台">
+  <title>山海鲜途 | 温州特色农产品出海平台</title>
+  <link rel="stylesheet" href="market.css">
 </head>
 <body>
-  <div class="app-shell">
-    <aside class="sidebar" id="sidebar">
-      <a class="brand" href="#dashboard" aria-label="山海鲜途全球通工作台">
-        <span class="brand-mark">山</span>
-        <span class="brand-copy"><strong>山海鲜途</strong><small>GLOBAL TRADE DESK</small></span>
-      </a>
-      <div class="workspace-label">工作空间</div>
-      <nav class="main-nav" aria-label="主导航">
-        <button class="nav-item active" data-page="dashboard"><span class="nav-glyph">⌂</span><span>工作台</span></button>
-        <button class="nav-item" data-page="batches"><span class="nav-glyph">▤</span><span>产品批次</span><span class="nav-count" id="batch-nav-count">0</span></button>
-        <button class="nav-item" data-page="compliance"><span class="nav-glyph">✓</span><span>合规校验</span></button>
-        <button class="nav-item" data-page="trace"><span class="nav-glyph">↗</span><span>追溯查询</span></button>
-        <button class="nav-item" data-page="rules"><span class="nav-glyph">≡</span><span>市场规则</span></button>
-      </nav>
-      <div class="sidebar-spacer"></div>
-      <div class="sidebar-note"><span class="status-dot"></span><span>本地演示空间</span></div>
-      <button class="nav-item settings-link" data-page="settings"><span class="nav-glyph">⚙</span><span>数据与设置</span></button>
-      <div class="user-block"><div class="avatar">温</div><div><strong>温州出海工作组</strong><small>企业工作区</small></div><button id="export-backup" class="icon-button" title="导出数据备份" aria-label="导出数据备份">⇩</button></div>
-    </aside>
+  <header class="site-header">
+    <a class="site-brand" href="#home" aria-label="山海鲜途首页"><span class="brand-symbol">⌁</span><span><strong>山海鲜途</strong><small>WENZHOU FRESH ROUTE</small></span></a>
+    <nav class="site-nav" aria-label="平台导航">
+      <a href="#home" data-route="home">首页</a>
+      <a href="#catalog" data-route="catalog">产品大厅</a>
+      <a href="#requests" data-route="requests">采购需求</a>
+      <a href="#quotes" data-route="quotes">询价中心</a>
+      <a href="workspace.html" class="workspace-link">出海工作台 ↗</a>
+    </nav>
+    <div class="header-actions"><button class="lang-button" data-action="language">中文 / EN</button><button class="text-button" data-action="login">登录</button><button class="solid-button" data-action="register">注册</button><button class="mobile-menu" data-action="menu" aria-label="打开导航">☰</button></div>
+  </header>
 
-    <main class="main-area">
-      <header class="topbar">
-        <button class="icon-button mobile-menu" id="menu-toggle" title="打开导航" aria-label="打开导航">☰</button>
-        <div class="breadcrumbs"><span>山海鲜途</span><span class="crumb-divider">/</span><strong id="page-crumb">工作台</strong></div>
-        <div class="top-actions">
-          <label class="search-box"><span aria-hidden="true">⌕</span><input id="global-search" type="search" placeholder="搜索批次、产品或市场" aria-label="搜索批次、产品或市场"><kbd>⌘ K</kbd></label>
-          <button class="icon-button top-help" id="help-button" title="查看平台说明" aria-label="查看平台说明">?</button>
-          <div class="top-avatar">温</div>
-        </div>
-      </header>
+  <main id="market-root"></main>
 
-      <div class="page-content" id="page-content"></div>
-      <footer class="app-footer"><span>山海鲜途·全球通</span><span>出海业务协同 · V1.1 优化版</span><span class="demo-disclaimer">市场规则为演示数据，请以官方现行要求为准</span></footer>
-    </main>
-  </div>
-  <div id="modal-root"></div>
-  <div id="toast-root" class="toast-root" aria-live="polite"></div>
-  <script src="app.js"></script>
+  <footer class="site-footer"><div><strong>山海鲜途</strong><span>山的馈赠 · 海的鲜味</span></div><div><a href="#catalog">产品大厅</a><a href="#requests">发布采购需求</a><a href="#quotes">询价中心</a></div><small>平台展示与采购撮合信息为演示内容，实际交易由双方自行核验。</small></footer>
+
+  <aside class="assistant-panel" id="assistant-panel" aria-label="AI智能助手" aria-hidden="true">
+    <div class="assistant-head"><div><span class="assistant-orb">AI</span><span><strong>山海 AI 助手</strong><small>产品匹配 · 采购问答 · 出海提示</small></span></div><button data-action="close-assistant" aria-label="关闭 AI 助手">×</button></div>
+    <div class="assistant-messages" id="assistant-messages"></div>
+    <div class="assistant-prompts"><button data-prompt="我想找适合海外采购的温州产品">海外采购推荐</button><button data-prompt="如何发布采购需求？">发布采购需求</button><button data-prompt="杨梅出口要注意什么？">出海提示</button></div>
+    <form class="assistant-form" id="assistant-form"><input id="assistant-input" autocomplete="off" placeholder="问问山海 AI，例如：推荐茶叶"><button aria-label="发送">↑</button></form>
+  </aside>
+  <button class="assistant-launcher" id="assistant-launcher" data-action="open-assistant" aria-label="打开 AI 智能助手"><span class="assistant-orb">AI</span><span>智能助手</span></button>
+  <div class="toast-root" id="toast-root" aria-live="polite"></div>
+  <script src="market.js"></script>
 </body>
 </html>

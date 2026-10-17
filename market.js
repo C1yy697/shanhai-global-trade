@@ -1,0 +1,96 @@
+(() => {
+  'use strict';
+
+  const STORE_KEY = 'shanhai-market-v1';
+  const products = [
+    { id: 'yb', name: '文成杨梅', en: 'Wencheng Bayberry', category: '鲜果生鲜', origin: '文成', unit: '箱 / 5kg', price: '¥38–56 / 箱', image: 'assets/product-1.jpg', summary: '果粒饱满、酸甜平衡，适合生鲜零售与社区团购。', tags: ['鲜果', '时令', '出口潜力'], supply: '6月–7月' },
+    { id: 'tea', name: '平阳黄汤', en: 'Pingyang Yellow Tea', category: '茶叶茶品', origin: '平阳', unit: '袋 / 250g', price: '¥68–128 / 袋', image: 'assets/product-2.jpg', summary: '温州传统黄茶，适合礼盒、餐饮和海外华人渠道。', tags: ['茶叶', '礼盒', '常年供应'], supply: '常年' },
+    { id: 'nori', name: '洞头紫菜', en: 'Dongtou Nori', category: '水产干货', origin: '洞头', unit: '包 / 100g', price: '¥29–45 / 包', image: 'assets/product-3.jpg', summary: '海岛风味干紫菜，支持餐饮、零售和团购采购。', tags: ['海味', '干货', '可定制'], supply: '常年' },
+    { id: 'vermicelli', name: '文成粉丝', en: 'Wencheng Vermicelli', category: '粮油副食', origin: '文成', unit: '箱 / 10kg', price: '¥88–118 / 箱', image: 'assets/product-4.jpg', summary: '传统手工粉丝，耐储运，适合海外商超和餐馆。', tags: ['粮食', '耐储运', '商超'], supply: '常年' },
+    { id: 'yam', name: '糯米山药', en: 'Glutinous Yam', category: '根茎蔬菜', origin: '文成', unit: '箱 / 5kg', price: '¥42–65 / 箱', image: 'assets/product-5.jpg', summary: '粉糯细腻的山地根茎产品，支持鲜品与预制加工。', tags: ['根茎', '山区', '加工'], supply: '10月–次年2月' },
+    { id: 'wood-ear', name: '高山黑木耳', en: 'Mountain Black Fungus', category: '食用菌', origin: '文成', unit: '包 / 250g', price: '¥39–72 / 包', image: 'assets/product-6.jpg', summary: '高山生态种植，干制稳定，适合食品加工和餐饮渠道。', tags: ['食用菌', '干货', '生态'], supply: '常年' },
+    { id: 'bamboo', name: '竹笋罐头', en: 'Canned Bamboo Shoots', category: '加工食品', origin: '文成', unit: '箱 / 24罐', price: '¥118–168 / 箱', image: 'assets/product-7.jpg', summary: '开罐即食的竹笋产品，可按目的地标签要求定制包装。', tags: ['罐藏', '定制', '商超'], supply: '常年' },
+    { id: 'sanbeixiang', name: '泰顺三杯香', en: 'Taishun Sanbei Tea', category: '茶叶茶品', origin: '泰顺', unit: '袋 / 250g', price: '¥78–138 / 袋', image: 'assets/product-8.jpg', summary: '山地绿茶香气清爽，适合礼品、茶馆和海外零售。', tags: ['绿茶', '礼盒', '常年供应'], supply: '常年' }
+  ];
+  const requests = [
+    { id: 'r1', title: '日本华人商超寻找稳定杨梅供应', buyer: '东京鲜选商贸', category: '鲜果生鲜', quantity: '每周 200–400 箱', deadline: '2026-06-18', note: '希望支持日文标签和冷链到港。' },
+    { id: 'r2', title: '新加坡餐饮渠道采购紫菜与粉丝', buyer: '南洋食集', category: '水产干货 / 粮油副食', quantity: '首单 500 箱', deadline: '2026-06-25', note: '关注稳定供货、规格和餐饮包装。' },
+    { id: 'r3', title: '海外礼品渠道寻找温州茶叶礼盒', buyer: '东方礼物采购中心', category: '茶叶茶品', quantity: '季度 1,000 盒', deadline: '2026-07-02', note: '需要中英双语资料和品牌故事。' }
+  ];
+  const quotes = [
+    { product: '平阳黄汤', buyer: '东京鲜选商贸', message: '希望了解 250g 礼盒的阶梯价格与供货周期。', status: '待回复', time: '今天 10:24' },
+    { product: '洞头紫菜', buyer: '南洋食集', message: '已收到规格资料，想确认首单 500 箱的装柜方式。', status: '沟通中', time: '昨天 16:40' },
+    { product: '文成杨梅', buyer: '海湾生鲜采购', message: '报价已确认，等待双方补充到港时间。', status: '已达成', time: '6月12日' }
+  ];
+  const state = loadState();
+  let currentRoute = routeFromHash();
+  let catalogQuery = '';
+  let catalogCategory = '全部';
+  let catalogOrigin = '全部';
+
+  function loadState() {
+    try { return JSON.parse(localStorage.getItem(STORE_KEY)) || { favorites: [], inquiries: [] }; } catch (_) { return { favorites: [], inquiries: [] }; }
+  }
+  function saveState() { localStorage.setItem(STORE_KEY, JSON.stringify(state)); }
+  function esc(value) { return String(value ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]); }
+  function routeFromHash() { const route = location.hash.slice(1).split('?')[0]; return ['home', 'catalog', 'requests', 'quotes'].includes(route) ? route : 'home'; }
+  function toast(message) { const root = document.getElementById('toast-root'); const item = document.createElement('div'); item.className = 'toast'; item.textContent = message; root.append(item); setTimeout(() => item.remove(), 3000); }
+  function productById(id) { return products.find(p => p.id === id) || products[0]; }
+  function setRoute(route) { const next = ['home', 'catalog', 'requests', 'quotes'].includes(route) ? route : 'home'; if (location.hash !== `#${next}`) history.pushState(null, '', `#${next}`); currentRoute = next; render(); window.scrollTo({ top: 0, behavior: 'smooth' }); }
+  function headerState() { document.querySelectorAll('[data-route]').forEach(el => el.classList.toggle('active', el.dataset.route === currentRoute)); }
+  function productCard(product) {
+    const active = state.favorites.includes(product.id);
+    return `<article class="product-card"><div class="product-photo"><img src="${product.image}" alt="${esc(product.name)}"><button class="favorite ${active ? 'active' : ''}" data-action="favorite" data-id="${product.id}" aria-label="${active ? '取消收藏' : '收藏'} ${esc(product.name)}">${active ? '♥' : '♡'}</button></div><div class="product-body"><h3>${esc(product.name)}</h3><p>${esc(product.en)} · ${esc(product.category)}</p><div class="product-meta"><span><strong>${esc(product.origin)}</strong><br>${esc(product.price)}</span><button data-action="product-detail" data-id="${product.id}">查看详情 ↗</button></div></div></article>`;
+  }
+  function homePage() {
+    const featured = products.slice(0, 4);
+    return `<div class="market-shell"><section class="hero"><div class="hero-copy"><p class="hero-kicker">温州特色农产品 · 海外采购对接</p><h1>一城山海鲜<br><em>与世界相见</em></h1><p>连接温州产地与海外商超、社区团购、餐饮渠道，让真实的好产品找到长期的采购伙伴。</p><form class="hero-search" id="hero-search"><span>⌕</span><input name="query" placeholder="寻找温州特色好物" aria-label="寻找温州特色好物"><button>搜索</button></form><div class="hero-actions"><a class="dark-button" href="#catalog">探索产品 ↗</a><button class="outline-button" data-action="new-request">发布采购需求</button></div><div class="hero-note"><span>◉ 8 类温州特色产品</span><span>◉ 支持中英双语资料</span><span>◉ AI 辅助匹配</span></div></div></section><section class="section"><div class="section-head"><div><p class="section-kicker">Wenzhou selection</p><h2>温州特色选品</h2></div><a href="#catalog" class="link-arrow">浏览全部 ↗</a></div><div class="product-grid">${featured.map(productCard).join('')}</div></section><section class="feature-band"><div class="feature"><span>⌁</span><h3>产地直连</h3><p>围绕温州县域特色产业，展示供应商、规格、供货周期和合作信息。</p></div><div class="feature"><span>⌁</span><h3>采购撮合</h3><p>发布采购需求，收藏产品，提交询价，沉淀双方沟通记录。</p></div><div class="feature"><span>AI</span><h3>智能助手</h3><p>根据产品、市场和数量给出匹配建议，并提示出海资料准备方向。</p></div></section></div>`;
+  }
+  function catalogPage() {
+    const categories = ['全部', ...new Set(products.map(p => p.category))];
+    const origins = ['全部', ...new Set(products.map(p => p.origin))];
+    const items = products.filter(p => (!catalogQuery || `${p.name}${p.en}${p.category}${p.origin}`.toLowerCase().includes(catalogQuery.toLowerCase())) && (catalogCategory === '全部' || p.category === catalogCategory) && (catalogOrigin === '全部' || p.origin === catalogOrigin));
+    return `<div class="catalog-page market-shell"><div class="page-hero"><div><p class="section-kicker">Products / 产品大厅</p><h1>温州好物，一览即达</h1><p>发现特色农产，连接海外采购需求。供应商可提交产品资料，采购方可直接收藏或发起询价。</p></div><label class="search-control"><span>⌕</span><input id="catalog-search" value="${esc(catalogQuery)}" placeholder="搜索产品、产地或供应商" aria-label="搜索产品、产地或供应商"></label></div><div class="filter-bar"><span class="filter-label">产品分类</span>${categories.map(c => `<button class="filter-chip ${c === catalogCategory ? 'active' : ''}" data-filter-type="category" data-filter-value="${esc(c)}">${esc(c)}</button>`).join('')}<span class="filter-label">产品产地</span>${origins.map(o => `<button class="filter-chip ${o === catalogOrigin ? 'active' : ''}" data-filter-type="origin" data-filter-value="${esc(o)}">${esc(o)}</button>`).join('')}</div><div class="section-head"><div><p class="section-kicker">Local products</p><h2>特色产品 <small style="font-family:inherit;font-size:13px;color:var(--muted)">${items.length} 项</small></h2></div><button class="outline-button" data-action="new-request">发布采购需求</button></div><div class="product-grid">${items.length ? items.map(productCard).join('') : '<div class="empty-panel" style="grid-column:1/-1"><strong>没有找到匹配产品</strong>换一个关键词或调整筛选条件。</div>'}</div></div>`;
+  }
+  function requestsPage() {
+    return `<div class="requests-page market-shell"><div class="page-hero"><div><p class="section-kicker">Purchase requests / 采购需求</p><h1>让需求先被看见</h1><p>海外商超、餐饮、社区团购和食品渠道可以发布采购方向，供应商按规格和供货周期响应。</p></div><button class="dark-button" data-action="new-request">＋ 发布采购需求</button></div><div class="filter-bar"><span class="filter-label">需求筛选</span><button class="filter-chip active">全部需求</button><button class="filter-chip">鲜果生鲜</button><button class="filter-chip">茶叶茶品</button><button class="filter-chip">水产干货</button><button class="filter-chip">加工食品</button></div><div class="requests-list">${requests.map(r => `<article class="request-row"><div class="request-main"><span class="tag">${esc(r.category)}</span><h3>${esc(r.title)}</h3><p>${esc(r.buyer)} · ${esc(r.note)}</p></div><div><span class="row-label">采购数量</span><span class="row-value">${esc(r.quantity)}</span></div><div><span class="row-label">响应截止</span><span class="row-value">${esc(r.deadline)}</span></div><button class="solid-button" data-action="respond-request" data-id="${r.id}">查看并响应</button></article>`).join('')}</div></div>`;
+  }
+  function quotesPage() {
+    const items = [...quotes, ...state.inquiries.map(i => ({ product: i.product, buyer: '我的采购询价', message: i.message, status: '待回复', time: '刚刚' }))];
+    return `<div class="quotes-page market-shell"><div class="page-hero"><div><p class="section-kicker">Inquiry center / 询价中心</p><h1>把一次询价变成长期合作</h1><p>查看采购方与供应方的询价、回复和沟通状态。正式业务接入后，可继续扩展为账号权限和实时消息。</p></div><a class="outline-button" href="#catalog">浏览产品</a></div><div class="quote-list">${items.map(q => `<article class="quote-row"><div class="quote-side"><span class="quote-avatar">${esc(q.buyer.slice(0, 1))}</span><div class="quote-main"><h3>${esc(q.product)}</h3><p>${esc(q.buyer)} · ${esc(q.message)}</p></div></div><div><span class="row-label">最近更新</span><span class="row-value">${esc(q.time)}</span></div><div><span class="tag ${q.status === '待回复' ? 'amber' : q.status === '已达成' ? 'gray' : ''}">${esc(q.status)}</span></div><button class="solid-button" data-action="open-quote">查看沟通</button></article>`).join('')}</div></div>`;
+  }
+  function render() { const root = document.getElementById('market-root'); const pages = { home: homePage, catalog: catalogPage, requests: requestsPage, quotes: quotesPage }; root.innerHTML = pages[currentRoute](); headerState(); bindPageEvents(); }
+  function openModal(title, subtitle, body, footer = '') { document.body.insertAdjacentHTML('beforeend', `<div class="modal-backdrop" data-action="close-modal"><section class="modal" role="dialog" aria-modal="true"><div class="modal-head"><div><h2>${title}</h2><p>${subtitle}</p></div><button class="modal-close" data-action="close-modal" aria-label="关闭">×</button></div>${body}${footer ? `<div class="modal-foot">${footer}</div>` : ''}</section></div>`); }
+  function closeModal() { document.querySelector('.modal-backdrop')?.remove(); }
+  function detailModal(id) { const p = productById(id); openModal(esc(p.name), `${esc(p.en)} · ${esc(p.origin)}产地`, `<div class="modal-body"><img src="${p.image}" alt="${esc(p.name)}" style="width:100%;aspect-ratio:2.2;object-fit:cover;border-radius:7px;margin-bottom:15px"><p style="font-size:13px;line-height:1.8;color:#56675d;margin:0 0 14px">${esc(p.summary)}</p><div class="form-grid"><div><span class="row-label">参考价格</span><strong>${esc(p.price)}</strong></div><div><span class="row-label">供货时间</span><strong>${esc(p.supply)}</strong></div><div><span class="row-label">包装规格</span><strong>${esc(p.unit)}</strong></div><div><span class="row-label">产品标签</span><strong>${esc(p.tags.join(' · '))}</strong></div></div></div>`, `<button class="outline-button" data-action="close-modal">关闭</button><button class="dark-button" data-action="inquiry" data-id="${p.id}">向供应方询价</button>`); }
+  function requestModal(prefill = '') { openModal('发布采购需求', '公开需求可被符合条件的温州供应商查看和响应。', `<form class="modal-body" id="request-form"><div class="form-grid"><div class="field"><label for="request-title">需求标题</label><input id="request-title" name="title" required placeholder="例如：采购适合日本商超的杨梅" value="${esc(prefill)}"></div><div class="field"><label for="request-category">产品类别</label><select id="request-category" name="category"><option>鲜果生鲜</option><option>茶叶茶品</option><option>水产干货</option><option>加工食品</option></select></div><div class="field"><label for="request-quantity">采购数量</label><input id="request-quantity" name="quantity" required placeholder="例如：首单 300 箱"></div><div class="field"><label for="request-deadline">响应截止</label><input id="request-deadline" name="deadline" type="date" required></div><div class="field full"><label for="request-note">补充说明</label><textarea id="request-note" name="note" required placeholder="填写目的地、包装、标签或交付要求"></textarea></div></div></form>`, '<button class="outline-button" data-action="close-modal">取消</button><button class="dark-button" data-action="submit-request">发布需求</button>'); }
+  function inquiryModal(id) { const p = productById(id); openModal('向供应方询价', `${esc(p.name)} · ${esc(p.origin)}产地`, `<form class="modal-body" id="inquiry-form"><div class="source-note" style="padding:12px;background:#edf5ec;border-radius:6px;margin-bottom:15px;color:#4f6559;font-size:11px">AI 建议：如果你是首次采购，可同时说明目的地、预计数量、包装规格和期望到货时间，供应方更容易快速回复。</div><div class="field"><label for="inquiry-quantity">预计采购数量</label><input id="inquiry-quantity" name="quantity" required placeholder="例如：每月 200 箱"></div><div class="field"><label for="inquiry-message">询价内容</label><textarea id="inquiry-message" name="message" required placeholder="请填写报价、供货周期、标签或物流问题"></textarea></div></form>`, '<button class="outline-button" data-action="close-modal">取消</button><button class="dark-button" data-action="submit-inquiry" data-id="'+p.id+'">提交询价</button>'); }
+  function sendAssistant(text) { const input = String(text || '').trim(); if (!input) return; addMessage(input, true); const lower = input.toLowerCase(); let reply = '我可以帮你按产品、产地、采购数量和目标市场做初步匹配。你可以试试“推荐茶叶”或“杨梅出口要注意什么”。'; if (lower.includes('茶')) reply = '推荐先看平阳黄汤和泰顺三杯香：两款都支持常年供应，适合礼盒、茶馆和海外零售。建议询价时说明目的地、包装规格和季度采购量。'; else if (lower.includes('杨梅') || lower.includes('鲜果')) reply = '文成杨梅适合日本商超、社区团购和生鲜零售。建议重点确认采摘窗口、预冷、冷链到港和目的地标签资料。'; else if (lower.includes('紫菜') || lower.includes('粉丝')) reply = '洞头紫菜和文成粉丝都属于耐储运品类，适合餐饮和商超。可以先按首单 300–500 箱询价，再确认装柜与外包装语言。'; else if (lower.includes('采购需求') || lower.includes('发布')) reply = '在“采购需求”页面点击“发布采购需求”，填写产品类别、数量、截止日期和目的地要求。公开需求会出现在供应商可浏览的列表中。'; else if (lower.includes('出口') || lower.includes('合规') || lower.includes('日本') || lower.includes('欧盟')) reply = '平台会根据产品和市场给出资料准备提示，但演示规则不等同于官方合规结论。正式出运前请由责任人员核对检测、原产地、标签和冷链资料。'; setTimeout(() => addMessage(reply, false), 240); }
+  function addMessage(message, user) { const root = document.getElementById('assistant-messages'); const el = document.createElement('div'); el.className = `assistant-message ${user ? 'user' : ''}`; el.textContent = message; root.append(el); root.scrollTop = root.scrollHeight; }
+  function openAssistant() { const panel = document.getElementById('assistant-panel'); panel.classList.add('open'); panel.setAttribute('aria-hidden', 'false'); if (!document.querySelector('.assistant-message')) addMessage('你好，我是山海 AI 助手。可以帮你发现温州产品、整理采购需求，也能提示不同市场的资料准备方向。', false); document.getElementById('assistant-input').focus(); }
+  function handleAction(action, target) {
+    const id = target.dataset.id;
+    if (action === 'favorite') { state.favorites = state.favorites.includes(id) ? state.favorites.filter(x => x !== id) : [...state.favorites, id]; saveState(); render(); toast(state.favorites.includes(id) ? '已加入收藏' : '已取消收藏'); }
+    else if (action === 'product-detail') detailModal(id);
+    else if (action === 'inquiry') { closeModal(); inquiryModal(id); }
+    else if (action === 'new-request') requestModal();
+    else if (action === 'respond-request') requestModal(target.closest('.request-row')?.querySelector('h3')?.textContent || '');
+    else if (action === 'open-quote') toast('沟通记录已打开，演示版暂以本地记录展示');
+    else if (action === 'submit-request') submitRequest();
+    else if (action === 'submit-inquiry') submitInquiry(id);
+    else if (action === 'close-modal') closeModal();
+    else if (action === 'open-assistant') openAssistant();
+    else if (action === 'close-assistant') { document.getElementById('assistant-panel').classList.remove('open'); document.getElementById('assistant-panel').setAttribute('aria-hidden', 'true'); }
+    else if (action === 'language') toast('英文产品字段已在产品大厅同步展示');
+    else if (action === 'login') toast('演示版登录入口已预留，可接入账号系统');
+    else if (action === 'register') toast('演示版注册入口已预留，可接入供应商或采购商身份');
+    else if (action === 'menu') document.querySelector('.site-nav').classList.toggle('open');
+  }
+  function submitRequest() { const form = document.getElementById('request-form'); if (!form?.reportValidity()) return; closeModal(); toast('采购需求已保存到演示空间'); setRoute('requests'); }
+  function submitInquiry(id) { const form = document.getElementById('inquiry-form'); if (!form?.reportValidity()) return; const data = new FormData(form); state.inquiries.push({ product: productById(id).name, quantity: data.get('quantity'), message: data.get('message') }); saveState(); closeModal(); toast('询价已提交，已进入询价中心'); setRoute('quotes'); }
+  function bindPageEvents() { document.getElementById('hero-search')?.addEventListener('submit', e => { e.preventDefault(); catalogQuery = new FormData(e.currentTarget).get('query')?.trim() || ''; setRoute('catalog'); }); document.getElementById('catalog-search')?.addEventListener('input', e => { catalogQuery = e.target.value; render(); const input = document.getElementById('catalog-search'); input?.focus(); input?.setSelectionRange(catalogQuery.length, catalogQuery.length); }); document.querySelectorAll('[data-filter-type]').forEach(button => button.addEventListener('click', () => { if (button.dataset.filterType === 'category') catalogCategory = button.dataset.filterValue; else catalogOrigin = button.dataset.filterValue; render(); })); }
+  document.addEventListener('click', event => { const route = event.target.closest('[data-route]'); if (route) { event.preventDefault(); setRoute(route.dataset.route); document.querySelector('.site-nav')?.classList.remove('open'); return; } const action = event.target.closest('[data-action]'); if (action) handleAction(action.dataset.action, action); const prompt = event.target.closest('[data-prompt]'); if (prompt) sendAssistant(prompt.dataset.prompt); });
+  document.getElementById('assistant-form').addEventListener('submit', event => { event.preventDefault(); const input = document.getElementById('assistant-input'); sendAssistant(input.value); input.value = ''; });
+  window.addEventListener('hashchange', () => { currentRoute = routeFromHash(); render(); });
+  render();
+})();
