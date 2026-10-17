@@ -19,6 +19,9 @@ python -m http.server 8765 --directory outputs
 
 该地址适合跨计算机演示，不是永久部署域名。永久使用应部署到正式静态托管服务。
 
+已部署的 GitHub Pages 地址：
+`https://c1yy697.github.io/shanhai-global-trade/`
+
 ## GitHub Pages 发布
 
 项目已包含 `.github/workflows/pages.yml` 和 `publish-github-pages.ps1`。完成 GitHub CLI 登录后，在 PowerShell 中执行：
