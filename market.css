@@ -374,10 +374,6 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
   .request-row .solid-button, .quote-row .solid-button { grid-column: 1/-1; width: 100%; }
   .request-detail-meta { grid-template-columns: 1fr 1fr; }
   .request-detail-meta .dark-button { grid-column: 1/-1; width: 100%; }
-  .channel-row { grid-template-columns: 1fr 1fr; }
-  .channel-row > div:first-child, .channel-row > a { grid-column: 1/-1; }
-  .match-check { grid-template-columns: 1fr; }
-  .match-check small { grid-column: 1; }
   .filter-result-banner { align-items: start; flex-direction: column; gap: 5px; }
   .auth-page { padding: 26px 15px 55px; }
   .auth-visual { min-height: 360px; padding: 26px; }
