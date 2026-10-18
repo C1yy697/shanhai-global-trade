@@ -45,7 +45,7 @@
     enabledRules: Object.fromEntries(MARKET_RULES.map(r => [r.id, true]))
   };
 
-  const titles = { dashboard: '工作台', batches: '产品批次', compliance: '合规校验', trace: '追溯查询', rules: '市场规则', settings: '数据与设置' };
+  const titles = { dashboard: '工作台', batches: '产品批次', 'batch-new': '新建出口批次', 'batch-edit': '维护出口批次', 'batch-detail': '批次详情', compliance: '合规校验', trace: '追溯查询', rules: '市场规则', settings: '数据与设置' };
   let state = loadState();
   let currentPage = pageFromHash();
   let selectedBatchId = state.batches[0]?.id || '';
@@ -267,9 +267,24 @@
       <article class="panel"><h2>演示规则声明</h2><p>目标市场规则为演示数据，用于展示规则启停和批次资料检查。它们没有经过官方法规数据库校验，不应据此判断真实出口合规性。</p></article></section>`;
   }
 
+  function batchFormPage(editing = false) {
+    const current = editing ? getBatch(selectedBatchId) : { id: '', product: '', category: '果蔬', origin: '', target: '日本', quantity: '', docs: {} };
+    if (!current) return `<div class="empty-state"><strong>未找到批次</strong><button class="button" data-page="batches">返回产品批次</button></div>`;
+    return `${pageHeading(editing ? '维护出口批次' : '新建出口批次', '登记产品基础信息、目标市场和随附资料状态。', '<button class="button" data-page="batches">返回产品批次</button>')}
+      <section class="panel form-page-panel"><div class="panel-heading"><div><h2>批次基础信息</h2><p>保存后将返回产品批次列表，并可继续进入合规校验和追溯查询。</p></div><span class="status info">本地演示数据</span></div><form id="batch-page-form"><div class="form-row"><div class="field"><label class="field-label" for="batch-page-id">批次编号</label><input id="batch-page-id" name="id" required value="${esc(current.id)}" placeholder="例如 WZ-YM-26019" ${editing ? 'readonly' : ''}></div><div class="field"><label class="field-label" for="batch-page-product">产品名称</label><input id="batch-page-product" name="product" required value="${esc(current.product)}" placeholder="例如 温州杨梅"></div></div><div class="form-row"><div class="field"><label class="field-label" for="batch-page-category">产品类别</label><select id="batch-page-category" name="category"><option ${current.category === '果蔬' ? 'selected' : ''}>果蔬</option><option ${current.category === '水产' ? 'selected' : ''}>水产</option><option ${current.category === '加工食品' ? 'selected' : ''}>加工食品</option><option ${current.category === '畜禽产品' ? 'selected' : ''}>畜禽产品</option></select></div><div class="field"><label class="field-label" for="batch-page-market">目标市场</label><select id="batch-page-market" name="target">${['日本','欧盟','东南亚'].map(m => `<option ${current.target === m ? 'selected' : ''}>${m}</option>`).join('')}</select></div></div><div class="form-row"><div class="field"><label class="field-label" for="batch-page-origin">产地</label><input id="batch-page-origin" name="origin" required value="${esc(current.origin)}" placeholder="县区 / 基地"></div><div class="field"><label class="field-label" for="batch-page-quantity">批次数量</label><input id="batch-page-quantity" name="quantity" required value="${esc(current.quantity)}" placeholder="数量及单位"></div></div><div class="field"><span class="field-label">已归档资料</span><div class="form-row batch-docs">${[['testReport','检测报告'],['originCert','原产地证明'],['marketLabel','市场标签资料'],['qualityCert','认证资料'],['coldChain','冷链记录']].map(([key, label]) => `<label><input type="checkbox" name="doc-${key}" ${current.docs?.[key] ? 'checked' : ''}>${label}</label>`).join('')}</div></div><div class="form-page-actions"><button type="button" class="button" data-page="batches">取消返回</button><button class="button primary" type="submit">${editing ? '保存批次修改' : '创建批次'} ↗</button></div></form></section>`;
+  }
+
+  function batchDetailPage() {
+    const batch = getBatch(selectedBatchId);
+    if (!batch) return `<div class="empty-state"><strong>暂无批次</strong><button class="button" data-page="batches">返回产品批次</button></div>`;
+    const results = evaluate(batch);
+    return `${pageHeading('批次详情', '查看当前出口批次的资料状态、合规提示和追溯记录。', '<button class="button" data-page="batches">返回产品批次</button><button class="button primary" data-action="edit-batch" data-id="'+esc(batch.id)+'">维护批次</button>')}
+      <section class="split-layout"><section class="panel"><div class="panel-heading"><div><h2>${esc(batch.product)}</h2><p>${esc(batch.id)} · ${esc(batch.origin)} · ${esc(batch.target)}</p></div>${statusTag(batch.status)}</div><div class="detail-grid"><div><span>产品类别</span><strong>${esc(batch.category)}</strong></div><div><span>批次数量</span><strong>${esc(batch.quantity)}</strong></div><div><span>创建日期</span><strong>${esc(batch.created)}</strong></div><div><span>已登记资料</span><strong>${Object.values(batch.docs || {}).filter(Boolean).length}/${Object.keys(batch.docs || {}).length} 份</strong></div></div><div class="detail-actions"><button class="button" data-page="compliance">进入合规校验</button><button class="button" data-page="trace">查看追溯记录</button></div></section><aside class="panel"><h2>待处理提示</h2><div class="rule-list">${results.filter(r => r.state !== 'ok').map(r => `<div class="rule-result"><div><strong>${esc(r.name)}</strong><small>${esc(r.detail)}</small></div>${statusTag(r.message)}</div>`).join('') || '<div class="empty-state"><strong>当前清单已齐全</strong><p>可以继续安排业务人员复核。</p></div>'}</div></aside></section>`;
+  }
+
   function render() {
     const root = document.getElementById('page-content');
-    const pages = { dashboard, batches: batchesPage, compliance: compliancePage, trace: tracePage, rules: rulesPage, settings: settingsPage };
+    const pages = { dashboard, batches: batchesPage, 'batch-new': () => batchFormPage(false), 'batch-edit': () => batchFormPage(true), 'batch-detail': batchDetailPage, compliance: compliancePage, trace: tracePage, rules: rulesPage, settings: settingsPage };
     root.innerHTML = pages[currentPage]();
     updateBatchCount();
   }
@@ -326,9 +341,9 @@
 
   function handleAction(action, target) {
     const id = target.dataset.id;
-    if (action === 'new-batch') openBatchModal();
+    if (action === 'new-batch') setPage('batch-new');
     else if (action === 'open-batch' || action === 'edit-batch') {
-      selectedBatchId = id; openBatchModal(getBatch(id));
+      selectedBatchId = id; setPage(action === 'edit-batch' ? 'batch-edit' : 'batch-detail');
     } else if (action === 'new-event') openEventModal(getBatch(id));
     else if (action === 'close-modal') document.getElementById('modal-root').innerHTML = '';
     else if (action === 'export-csv') exportCsv();
@@ -349,6 +364,21 @@
     const action = event.target.closest('[data-action]');
     if (action) { handleAction(action.dataset.action, action); return; }
     if (event.target.id === 'help-button') showHelp();
+  });
+
+  document.addEventListener('submit', event => {
+    if (event.target.id !== 'batch-page-form') return;
+    event.preventDefault();
+    const form = new FormData(event.target);
+    const editing = currentPage === 'batch-edit';
+    const current = editing ? getBatch(selectedBatchId) : null;
+    const saved = { id: String(form.get('id')).trim(), product: String(form.get('product')).trim(), category: form.get('category'), origin: String(form.get('origin')).trim(), target: form.get('target'), quantity: String(form.get('quantity')).trim(), created: editing ? current.created : new Date().toISOString().slice(0, 10), status: '待补材料', docs: Object.fromEntries(DOC_KEYS.map(k => [k, form.has(`doc-${k}`)])), events: editing ? (current.events || []) : [] };
+    const index = state.batches.findIndex(x => x.id === saved.id);
+    if (!editing && index >= 0) { toast('批次编号已存在，请更换编号'); return; }
+    if (index >= 0) state.batches[index] = { ...state.batches[index], ...saved };
+    else { state.batches.unshift(saved); selectedBatchId = saved.id; }
+    state.batches.forEach(x => { if (!evaluate(x).some(r => r.state !== 'ok') && x.status !== '已归档') x.status = '合规复核中'; });
+    saveState(); toast(editing ? '批次资料已更新' : '批次已创建'); setPage('batch-detail');
   });
 
   document.addEventListener('change', event => {
