@@ -245,6 +245,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
 .workflow-guide h2 { margin: 10px 0 5px; color: var(--deep); font-family: "Noto Serif SC", "Songti SC", serif; font-size: 20px; font-weight: 500; }
 .workflow-guide p { margin: 0 0 24px; color: var(--muted); font-size: 11px; line-height: 1.8; }
 .workflow-step { display: inline-grid; place-items: center; width: 28px; height: 28px; border-radius: 50%; background: var(--forest); color: #fff; font-size: 10px; font-weight: 800; }
+.workflow-value { display: block; margin: 5px 0 16px; color: var(--deep); font-size: 15px; }
 .workflow-form-panel { min-width: 0; }
 .workflow-actions { display: flex; justify-content: flex-end; gap: 8px; margin-top: 7px; padding-top: 16px; border-top: 1px solid #edf0eb; }
 .workspace-stats { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 12px; margin: 0 0 20px; }
