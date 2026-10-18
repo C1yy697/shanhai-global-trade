@@ -19,6 +19,7 @@
       <a href="#buyer" data-route="buyer">采购工作台</a>
       <a href="#supplier" data-route="supplier">供应商工作台</a>
       <a href="#services" data-route="services">服务中心</a>
+      <a href="#channels" data-route="channels">侨商渠道</a>
       <a href="workspace.html" class="workspace-link">出海工作台 ↗</a>
     </nav>
     <div class="header-actions"><button class="lang-button" data-action="language">中文 / EN</button><button class="text-button" data-action="login">登录</button><button class="solid-button" data-action="register">注册</button><button class="mobile-menu" data-action="menu" aria-label="打开导航">☰</button></div>
@@ -26,18 +27,19 @@
 
   <main id="market-root"></main>
 
-  <footer class="site-footer"><div><strong>山海鲜途</strong><span>山的馈赠 · 海的鲜味</span></div><div><a href="#catalog">产品大厅</a><a href="#buyer">采购工作台</a><a href="#supplier">供应商工作台</a><a href="#services">服务中心</a></div><small>平台展示与采购撮合信息为演示内容，实际交易由双方自行核验。</small></footer>
+  <footer class="site-footer"><div><strong>山海鲜途</strong><span>山的馈赠 · 海的鲜味</span></div><div><a href="#catalog">产品大厅</a><a href="#buyer">采购工作台</a><a href="#supplier">供应商工作台</a><a href="#services">服务中心</a><a href="#channels">侨商渠道</a></div><small>模拟案例与本地记录仅保存在当前浏览器；“已登记”不等于“已核验”，也不代表真实成交或合规审查。</small></footer>
 
   <aside class="assistant-panel" id="assistant-panel" aria-label="AI智能助手" aria-hidden="true">
     <div class="assistant-head"><div><span class="assistant-orb">AI</span><span><strong>山海 AI 助手</strong><small>产品匹配 · 采购问答 · 出海提示</small></span></div><button data-action="close-assistant" aria-label="关闭 AI 助手">×</button></div>
-    <div class="assistant-status"><span class="status-live"><i></i>在线</span><span>已分析 8 类温州产品</span><span class="assistant-trend">持续更新</span></div>
+    <div class="assistant-status"><span class="status-live"><i></i>本地演示</span><span>资料规则快照：2026-10-18</span><span class="assistant-trend">待人工核实</span></div>
     <div class="assistant-visual" id="assistant-visual"></div>
     <div class="assistant-messages" id="assistant-messages"></div>
-    <div class="assistant-prompts"><button data-prompt="我想找适合海外采购的温州产品">海外采购推荐</button><button data-prompt="如何发布采购需求？">发布采购需求</button><button data-prompt="杨梅出口要注意什么？">出海提示</button></div>
+    <div class="assistant-prompts"><button data-prompt="帮我预检杨梅出口资料">出海预检</button><button data-prompt="资料清单是官方合规结论吗？">规则来源</button><button data-prompt="如何发布采购需求？">发布采购需求</button></div>
     <form class="assistant-form" id="assistant-form"><input id="assistant-input" autocomplete="off" placeholder="问问山海 AI，例如：推荐茶叶"><button aria-label="发送">↑</button></form>
   </aside>
   <button class="assistant-launcher" id="assistant-launcher" data-action="open-assistant" aria-label="打开 AI 智能助手"><span class="assistant-orb">AI</span><span>智能助手</span></button>
   <div class="toast-root" id="toast-root" aria-live="polite"></div>
+  <script src="shared.js"></script>
   <script src="market.js"></script>
 </body>
 </html>
