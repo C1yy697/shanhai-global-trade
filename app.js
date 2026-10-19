@@ -19,8 +19,8 @@
   const seed = {
     version: STORAGE_VERSION,
     batches: [
-      { id: 'WZ-YM-26018', product: '温州杨梅', category: '果蔬', origin: '温州市瓯海区', target: '日本', quantity: '860 kg', created: '2026-10-15', status: '准备出运', docs: { testReport: true, originCert: true, marketLabel: false, qualityCert: false, coldChain: false }, events: [
-        { type: '采收入库', time: '2026-10-12 08:40', actor: '瓯海果品合作社', note: '批次采收完成，完成入库抽检。' },
+      { id: 'WZ-YM-26018', product: '文成杨梅', productId: 'WZ-PR-YM-001', category: '果蔬', origin: '温州市文成县', target: '日本', quantity: '860 kg（演示）', created: '2026-10-15', status: '准备出运', docs: { testReport: true, originCert: true, marketLabel: false, qualityCert: false, coldChain: false }, events: [
+        { type: '采收入库', time: '2026-10-12 08:40', actor: '文成果品合作社（演示）', note: '批次采收完成，完成入库抽检。' },
         { type: '质量检测', time: '2026-10-13 14:15', actor: '温州农产品检测中心', note: '检测报告已归档，待复核。' },
         { type: '包装加工', time: '2026-10-14 10:30', actor: '鲜途包装服务点', note: '完成分级、预冷及出口包装。' }
       ] },
@@ -61,13 +61,14 @@
   function normalizeBatch(batch) {
     const item = batch && typeof batch === 'object' ? batch : {};
     const productIds = { yb: 'WZ-PR-YM-001', tea: 'WZ-PR-TEA-002', nori: 'WZ-PR-NT-003' };
+    const isLegacyBayberryDemo = item.id === 'WZ-YM-26018' && ['温州杨梅', '文成杨梅'].includes(item.product);
     return {
       id: String(item.id || '').trim(),
       productId: productIds[item.productId] || String(item.productId || (String(item.id || '').startsWith('WZ-YM-') ? 'WZ-PR-YM-001' : '')).trim(),
       requestId: String(item.requestId || (item.id === 'WZ-YM-26018' ? 'r1' : '')).trim(),
-      product: String(item.product || '').trim(),
+      product: isLegacyBayberryDemo ? '文成杨梅' : String(item.product || '').trim(),
       category: item.category || '果蔬',
-      origin: String(item.origin || '').trim(),
+      origin: isLegacyBayberryDemo ? '温州市文成县' : String(item.origin || '').trim(),
       target: item.target || '日本',
       quantity: String(item.quantity || '').trim(),
       created: item.created || new Date().toISOString().slice(0, 10),

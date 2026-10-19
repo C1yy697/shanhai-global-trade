@@ -16,11 +16,7 @@
       <a href="#catalog" data-route="catalog">产品大厅</a>
       <a href="#requests" data-route="requests">采购需求</a>
       <a href="#quotes" data-route="quotes">询价中心</a>
-      <a href="#buyer" data-route="buyer">采购工作台</a>
-      <a href="#supplier" data-route="supplier">供应商工作台</a>
-      <a href="#services" data-route="services">服务中心</a>
-      <a href="#business-model" data-route="business-model">合作方案</a>
-      <a href="#channels" data-route="channels">侨商渠道</a>
+      <details class="nav-menu"><summary>业务中心</summary><div class="nav-menu-panel"><a href="#buyer" data-route="buyer">采购工作台</a><a href="#supplier" data-route="supplier">供应商工作台</a><a href="#services" data-route="services">服务中心</a><a href="#business-model" data-route="business-model">合作方案</a><a href="#channels" data-route="channels">侨商渠道</a><button type="button" class="nav-assistant-button" data-action="open-assistant">打开 AI 智能助手</button><button type="button" class="nav-lang-button" data-action="language">中文 / EN</button></div></details>
       <a href="workspace.html" class="workspace-link">出海工作台 ↗</a>
     </nav>
     <div class="header-actions"><button class="lang-button" data-action="language">中文 / EN</button><button class="text-button" data-action="login">登录</button><button class="solid-button" data-action="register">注册</button><button class="mobile-menu" data-action="menu" aria-label="打开导航">☰</button></div>
@@ -32,7 +28,7 @@
 
   <aside class="assistant-panel" id="assistant-panel" aria-label="AI智能助手" aria-hidden="true">
     <div class="assistant-head"><div><span class="assistant-orb">AI</span><span><strong>山海 AI 助手</strong><small>产品匹配 · 采购问答 · 出海提示</small></span></div><button data-action="close-assistant" aria-label="关闭 AI 助手">×</button></div>
-    <div class="assistant-status"><span class="status-live"><i></i>在线</span><span>已分析 8 类温州产品</span><span class="assistant-trend">持续更新</span></div>
+    <div class="assistant-status"><span class="status-live demo-assistant"><i></i>演示助手</span><span>根据当前浏览器中的模拟资料生成提示</span><span class="assistant-trend">规则待核实</span></div>
     <div class="assistant-visual" id="assistant-visual"></div>
     <div class="assistant-messages" id="assistant-messages"></div>
     <div class="assistant-prompts"><button data-prompt="帮我预检杨梅出口资料">出海预检</button><button data-prompt="资料清单是官方合规结论吗？">规则来源</button><button data-prompt="如何发布采购需求？">发布采购需求</button></div>

@@ -210,6 +210,14 @@ tbody tr:hover { background: #fbfcfb; }
 .source-note { padding: 11px 12px; background: #f7f9f7; border-radius: 5px; color: #66736a; font-size: 10px; line-height: 1.65; }
 .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
 
+body { font-size: 15px; }
+.page-subtitle, .panel-heading p, .metric-top, .metric-foot, .attention-item small, .attention-date, .chart-legend, .chart-label, .chart-note, .table-meta, .cell-secondary, .empty-state p, .field-label, .field input, .field select, .field textarea, .source-note, .detail-grid span, .detail-grid strong, .linked-records article span, .linked-records article small, .rule-line small, .rule-result strong, .rule-result small, .timeline-body p, .timeline-body small, .market-card p, .market-card .market-meta { font-size: 14px; line-height: 1.55; }
+.button, .button.small, .text-button, .table-action, .status, .metric-icon { font-size: 14px; }
+th, td { font-size: 14px; }
+.metric-value { font-size: 27px; }
+.panel-heading h2, .attention-item strong, .rule-line strong { font-size: 15px; }
+.field input, .field select, .field textarea { min-height: 42px; }
+
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; }
 }
