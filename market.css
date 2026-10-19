@@ -48,7 +48,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
 .lang-button, .text-button { border: 0; background: transparent; color: #33453c; padding: 7px 0; }
 .lang-button { font-size: 12px; }
 .text-button { font-size: 13px; }
-.solid-button, .outline-button, .dark-button { min-height: 38px; padding: 0 18px; border-radius: 7px; font-weight: 700; border: 1px solid var(--forest); }
+.solid-button, .outline-button, .dark-button { min-height: 38px; display: inline-flex; align-items: center; justify-content: center; padding: 0 18px; border-radius: 7px; font-weight: 700; border: 1px solid var(--forest); text-align: center; }
 .solid-button, .dark-button { background: var(--forest); color: #fff; }
 .outline-button { background: transparent; color: var(--forest); }
 .solid-button:hover, .dark-button:hover { background: var(--deep); }
@@ -298,6 +298,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
 .panel-note { color: var(--muted); font-size: 10px; }
 .table-wrap { overflow-x: auto; }
 .comparison-table { width: 100%; border-collapse: collapse; min-width: 690px; }
+table th, table td { text-align: center; vertical-align: middle; }
 .comparison-table th, .comparison-table td { padding: 14px 12px; border-bottom: 1px solid #edf0eb; text-align: center; font-size: 11px; vertical-align: middle; }
 .comparison-table th { color: #7d8b82; font-size: 10px; font-weight: 700; }
 .comparison-table td strong, .comparison-table td small { display: block; }
