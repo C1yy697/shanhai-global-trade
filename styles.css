@@ -272,3 +272,11 @@ th, td { font-size: 14px; }
   .form-page-actions .button, .detail-actions .button { width: 100%; }
   .detail-grid { grid-template-columns: 1fr; }
 }
+
+/* Set a legible floor for dense workspace tables and controls. */
+.button, .button.small, .text-button, .table-action, .status { font-size: 14px; }
+.control, .search-control, .field input, .field select, .field textarea { font-size: 14px; }
+th, td { font-size: 14px; line-height: 1.5; vertical-align: middle; }
+td small, th small, .cell-secondary, .table-meta, .source-note, .field-label, .page-subtitle, .panel-heading p, .detail-grid span, .linked-records article span, .linked-records article small, .rule-result small, .rule-line small, .timeline-body small, .timeline-body p { font-size: 12px; line-height: 1.5; }
+.page-heading > div h1 { font-size: 24px; }
+.panel-heading h2 { font-size: 16px; }

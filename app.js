@@ -2,7 +2,7 @@
   'use strict';
 
   const STORE_KEY = 'shanhai-global-trade-v1';
-  const APP_VERSION = '1.2';
+  const APP_VERSION = '1.3';
   const STORAGE_VERSION = 2;
   const DOC_KEYS = ['testReport', 'originCert', 'marketLabel', 'qualityCert', 'coldChain'];
   const MARKET_RULES = [
@@ -221,7 +221,7 @@
       <section class="panel table-panel">${tableMarkup(items)}<div class="table-meta"><span>共 ${items.length} 个批次</span><span>数据保存在当前浏览器</span></div></section>`;
   }
 
-  function getBatch(id) { return state.batches.find(b => b.id === id) || state.batches[0]; }
+  function getBatch(id) { return state.batches.find(b => b.id === id) || null; }
 
   function rulesFor(batch, market = batch?.target) {
     return MARKET_RULES.filter(r => state.enabledRules[r.id] !== false && r.market === market && (r.category === '通用' || !batch || r.category === batch.category));
@@ -246,8 +246,8 @@
     const total = results.length;
     return `${pageHeading('合规校验', '按目标市场查看资料完整度；校验结果仅供业务准备参考。', '<button class="button" data-action="print">打印本页</button>')}
       <section class="panel" style="margin-bottom:14px"><div class="batch-selector"><div class="field"><label class="field-label" for="compliance-batch">出口批次</label><select class="control" id="compliance-batch" style="width:100%">${state.batches.map(b => `<option value="${esc(b.id)}" ${b.id === batch.id ? 'selected' : ''}>${esc(b.id)} · ${esc(b.product)}</option>`).join('')}</select></div><div class="field"><label class="field-label" for="compliance-market">目标市场</label><select class="control" id="compliance-market" style="width:100%">${['日本','欧盟','东南亚'].map(m => `<option ${m === market ? 'selected' : ''}>${m}</option>`).join('')}</select></div><button class="button primary" data-action="run-check">重新校验</button></div></section>
-      <div class="split-layout"><section class="panel"><div class="panel-heading"><div><h2>${esc(market)} · 资料检查清单</h2><p>${esc(batch.product)} / ${esc(batch.id)} · 命中 ${total} 条已启用演示规则</p></div><span class="status ${missing ? 'warn' : 'ok'}">${missing ? '待补资料' : '资料齐全'}</span></div><div class="rule-list">${results.map(r => `<div class="rule-result"><div><strong>${esc(r.name)}</strong><small>${esc(r.detail)}</small><small>规则来源：${esc(r.source)} · 规则编号：${esc(r.id)}</small></div>${statusTag(r.message)}</div>`).join('') || '<div class="empty-state"><strong>该市场暂无启用规则</strong><p>请在市场规则页维护演示规则。</p></div>'}</div></section>
-      <aside class="panel"><h2 style="font-size:13px;margin-bottom:5px">校验摘要</h2><p style="font-size:10px;color:var(--muted);margin-bottom:0">基于批次已登记字段进行确定性检查。</p><div class="result-summary ${missing ? 'warn' : 'ok'}"><span class="result-count">${total - missing}/${total}</span><span><strong>${missing ? `${missing} 项需要处理` : '当前清单已齐全'}</strong><small>清单完成数 / 命中规则数</small></span></div><div class="source-note">此页面使用本地示例规则，不代表海关、检验检疫或认证机构的正式判断。正式业务应由责任人员依据目标市场官方现行要求复核。</div><div style="margin-top:14px"><button class="button" data-action="edit-batch" data-id="${esc(batch.id)}">维护批次资料</button></div></aside></div>`;
+      <div class="split-layout"><section class="panel"><div class="panel-heading"><div><h2>${esc(market)} · 资料检查清单</h2><p>${esc(batch.product)} / ${esc(batch.id)} · 命中 ${total} 条已启用演示规则</p></div><span class="status ${total === 0 ? 'info' : missing ? 'warn' : 'ok'}">${total === 0 ? '暂不适用' : missing ? '待补资料' : '资料齐全'}</span></div><div class="rule-list">${results.map(r => `<div class="rule-result"><div><strong>${esc(r.name)}</strong><small>${esc(r.detail)}</small><small>规则来源：${esc(r.source)} · 规则编号：${esc(r.id)}</small></div>${statusTag(r.message)}</div>`).join('') || '<div class="empty-state"><strong>当前没有可用规则，无法判断资料完整性</strong><p>请在市场规则页启用适用的演示规则；真实出口要求仍需人工核实。</p></div>'}</div></section>
+      <aside class="panel"><h2 style="font-size:13px;margin-bottom:5px">校验摘要</h2><p style="font-size:10px;color:var(--muted);margin-bottom:0">基于批次已登记字段进行确定性检查。</p><div class="result-summary ${total === 0 ? '' : missing ? 'warn' : 'ok'}"><span class="result-count">${total === 0 ? '—' : `${total - missing}/${total}`}</span><span><strong>${total === 0 ? '暂无已启用的适用规则' : missing ? `${missing} 项需要处理` : '演示清单已登记'}</strong><small>${total === 0 ? '无法判断资料完整性' : '清单完成数 / 命中规则数'}</small></span></div><div class="source-note">此页面使用本地示例规则，不代表海关、检验检疫或认证机构的正式判断。正式业务应由责任人员依据目标市场官方现行要求复核。</div><div style="margin-top:14px"><button class="button" data-action="edit-batch" data-id="${esc(batch.id)}">维护批次资料</button></div></aside></div>`;
   }
 
   function tracePage() {
@@ -279,7 +279,7 @@
     return `${pageHeading('数据与设置', '查看本地演示空间的数据保存方式及申报前注意事项。', '<button class="button" data-action="export-backup">⇩ 导出 JSON 备份</button>')}
       <section class="settings-grid"><article class="panel"><h2>本地数据</h2><p>批次和规则配置保存在当前浏览器的 localStorage 中，不会上传到服务器。不同浏览器或设备之间不会自动同步。</p><div class="source-note">当前记录：${state.batches.length} 个批次 · 数据体积约 ${Math.ceil(bytes / 1024)} KB</div><div style="margin-top:13px;display:flex;gap:8px"><button class="button" data-action="import-backup">导入 JSON</button><button class="button danger" data-action="clear-data">恢复演示数据</button><input type="file" id="import-file" accept="application/json" hidden></div></article>
       <article class="panel"><h2>软件版本</h2><p><strong>山海鲜途·全球通农产品出海智能赋能平台 V${APP_VERSION}</strong><br>浏览器端单机演示版，采用 HTML、CSS 与原生 JavaScript 编写。适用于流程演示和源码审阅。</p><div class="source-note">本版本没有服务端账号体系、云端数据库、真实外贸接口或区块链存证。正式业务上线前需要安全、数据合规及规则内容评审。</div></article>
-      <article class="panel"><h2>著作权登记准备</h2><p>登记申请材料应与实际完成的软件版本一致。源码、说明书、版本信息、开发完成日期、权利人及开发者信息须依据真实情况确认。</p><button class="button" data-action="show-help">查看准备事项</button></article>
+      <article class="panel"><h2>著作权登记准备</h2><p>登记申请材料应与实际完成的软件版本一致。源码、说明书、版本信息、开发完成日期、权利人及开发者信息须依据真实情况确认；平台不预设权利人或开发者姓名。</p><button class="button" data-action="show-help">查看准备事项</button></article>
       <article class="panel"><h2>演示规则声明</h2><p>目标市场规则为演示数据，用于展示规则启停和批次资料检查。它们没有经过官方法规数据库校验，不应据此判断真实出口合规性。</p></article></section>`;
   }
 
@@ -296,6 +296,7 @@
     const batch = getBatch(selectedBatchId);
     if (!batch) return `<div class="empty-state"><strong>暂无批次</strong><button class="button" data-page="batches">返回产品批次</button></div>`;
     const results = evaluate(batch);
+    if (!results.length) return `${pageHeading('批次详情', '查看当前出口批次的资料状态、合规提示和追溯记录。', '<button class="button" data-page="batches">返回产品批次</button>')}<div class="panel empty-state"><strong>当前没有适用的已启用规则，无法判断资料完整性</strong><p>请维护市场规则后再查看校验提示。</p></div>`;
     const links = (window.ShanhaiBridge?.read().links || []).filter(item => item.batchId === batch.id || (batch.requestId && item.requestId === batch.requestId));
     const linkedRecords = links.length ? `<section class="panel linked-records"><h2>关联业务记录</h2><p>产品编号 ${esc(batch.productId || '未关联')} · 需求编号 ${esc(batch.requestId || '未关联')} · 批次编号 ${esc(batch.id)}</p>${links.map(item => `<article><strong>${esc(item.type === 'response' ? '供应商响应' : '反馈')} · ${esc(item.id)}</strong><span>${esc(item.company || item.status || '')} ${esc(item.quantity || '')}</span><small>${esc(item.note || '')} · ${esc(item.created || '')}</small></article>`).join('')}</section>` : '';
     return `${pageHeading('批次详情', '查看当前出口批次的资料状态、合规提示和追溯记录。', '<button class="button" data-page="batches">返回产品批次</button><button class="button primary" data-action="edit-batch" data-id="'+esc(batch.id)+'">维护批次</button>')}
@@ -309,7 +310,7 @@
     const batchForm = document.getElementById('batch-page-form');
     if (batchForm) {
       const params = new URLSearchParams(window.location.hash.split('?')[1] || '');
-      const current = currentPage === 'batch-edit' ? getBatch(selectedBatchId) : {};
+      const current = currentPage === 'batch-edit' ? (getBatch(selectedBatchId) || {}) : {};
       for (const [name, value] of [['productId', current.productId || params.get('productId') || ''], ['requestId', current.requestId || params.get('requestId') || '']]) {
         const input = document.createElement('input'); input.type = 'hidden'; input.name = name; input.value = name === 'productId' ? ({ yb: 'WZ-PR-YM-001', tea: 'WZ-PR-TEA-002', nori: 'WZ-PR-NT-003' }[value] || value) : value; batchForm.append(input);
       }
@@ -372,7 +373,7 @@
     if (action === 'new-batch') setPage('batch-new');
     else if (action === 'open-batch' || action === 'edit-batch') {
       selectedBatchId = id; setPage(action === 'edit-batch' ? 'batch-edit' : 'batch-detail');
-    } else if (action === 'new-event') openEventModal(getBatch(id));
+    } else if (action === 'new-event') { const batch = getBatch(id); if (batch) openEventModal(batch); else toast('未找到该批次，请从批次列表重新选择'); }
     else if (action === 'close-modal') document.getElementById('modal-root').innerHTML = '';
     else if (action === 'export-csv') exportCsv();
     else if (action === 'export-backup') exportBackup();
@@ -387,9 +388,13 @@
   }
 
   document.addEventListener('click', event => {
+    const backdrop = event.target.closest('.modal-backdrop');
+    const clickedAction = event.target.closest('[data-action]');
+    if (backdrop && event.target === backdrop) { handleAction('close-backdrop', backdrop); return; }
+    if (backdrop && clickedAction === backdrop) return;
     const nav = event.target.closest('[data-page]');
     if (nav) { setPage(nav.dataset.page); return; }
-    const action = event.target.closest('[data-action]');
+    const action = clickedAction;
     if (action) { handleAction(action.dataset.action, action); return; }
     if (event.target.id === 'help-button') showHelp();
   });
