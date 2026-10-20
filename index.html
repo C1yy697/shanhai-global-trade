@@ -34,7 +34,8 @@
     <div class="assistant-prompts"><button data-prompt="帮我预检杨梅出口资料">出海预检</button><button data-prompt="资料清单是官方合规结论吗？">规则来源</button><button data-prompt="如何发布采购需求？">发布采购需求</button></div>
     <form class="assistant-form" id="assistant-form"><input id="assistant-input" autocomplete="off" placeholder="问问山海 AI，例如：推荐茶叶"><button aria-label="发送">↑</button></form>
   </aside>
-  <button class="assistant-launcher" id="assistant-launcher" data-action="open-assistant" aria-label="打开 AI 智能助手"><span class="assistant-orb">AI</span><span>智能助手</span></button>
+  <aside class="shortlist-bar" id="shortlist-bar" hidden aria-live="polite"><strong id="shortlist-summary"></strong><button type="button" data-action="open-shortlist">查看选品清单</button><button type="button" data-action="batch-inquiry">统一询价</button></aside>
+  <button class="assistant-launcher" id="assistant-launcher" data-action="toggle-assistant" aria-label="打开或关闭 AI 智能助手" aria-expanded="false"><span class="assistant-orb">AI</span><span>智能助手</span></button>
   <div class="toast-root" id="toast-root" aria-live="polite"></div>
   <script src="shared.js"></script>
   <script src="market.js"></script>
