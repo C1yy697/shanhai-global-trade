@@ -379,8 +379,7 @@
     else if (action === 'agent-human') setRoute('service-request');
     else if (action === 'agent-help') toast('海禾为演示助手。资料核对与合规判断请咨询专业机构。');
     else if (action === 'agent-upload') document.getElementById('agent-file')?.click();
-    else if (action === 'open-assistant') setRoute('assistant');
-    else if (action === 'toggle-assistant') setRoute('assistant');
+    else if (action === 'open-assistant' || action === 'toggle-assistant') window.location.href = 'assistant.html';
     else if (action === 'close-assistant') closeAssistant();
     else if (action === 'open-shortlist') setRoute('buyer');
     else if (action === 'language') switchLocale();

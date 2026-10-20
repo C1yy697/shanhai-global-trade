@@ -692,6 +692,7 @@ body.agent-route-active #market-root { min-height: 100dvh; }
 .agent-next-step span { flex: 1; }
 .agent-professional p { margin: 0 0 12px; color: #76827b; font-size: 13px; line-height: 1.6; }
 .agent-professional button { min-height: 34px; padding: 0 10px; border: 1px solid #d8e1d6; border-radius: 5px; background: #f8faf6; color: #315d49; font-size: 12px; }
+.agent-professional a { min-height: 34px; display: inline-flex; align-items: center; padding: 0 10px; border: 1px solid #d8e1d6; border-radius: 5px; background: #f8faf6; color: #315d49; font-size: 12px; }
 .agent-sample-product { display: flex; align-items: center; gap: 12px; padding: 10px; border: 1px solid #e5e9e2; border-radius: 8px; background: #fff; }
 .agent-sample-product img { width: 86px; height: 68px; border-radius: 5px; object-fit: cover; }
 .agent-sample-product > div { min-width: 0; flex: 1; display: grid; gap: 4px; }
@@ -705,6 +706,7 @@ body.agent-route-active #market-root { min-height: 100dvh; }
 .agent-welcome p { max-width: 520px; margin: 0; color: #6f7e75; font-size: 14px; line-height: 1.6; }
 .agent-welcome > div { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; }
 .agent-welcome button { min-height: 38px; padding: 0 12px; border: 1px solid #d4dfd3; border-radius: 5px; background: #fff; color: #285743; font-size: 12px; }
+.agent-welcome a { min-height: 38px; display: inline-flex; align-items: center; padding: 0 12px; border: 1px solid #d4dfd3; border-radius: 5px; background: #fff; color: #285743; font-size: 12px; }
 @media (max-width: 1100px) {
   .agent-workspace { grid-template-columns: 220px minmax(0,1fr); }
   .agent-columns { grid-template-columns: minmax(0,1fr) 270px; gap: 18px; padding-inline: 20px; }
