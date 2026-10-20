@@ -4,49 +4,78 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#f7f7f2">
-  <meta name="description" content="海禾 AI 选品与出海对话工作区">
-  <title>海禾 AI 助手 · 山海鲜途</title>
-  <link rel="stylesheet" href="market.css?v=20261020-agent-standalone1">
+  <meta name="description" content="海禾 AI 独立对话工作区">
+  <title>海禾 AI 对话工作区 · 山海鲜途</title>
+  <link rel="stylesheet" href="market.css?v=20261020-agent-workspace3">
 </head>
 <body class="agent-route-active">
   <main id="assistant-app" class="agent-workspace">
     <aside class="agent-sidebar">
       <a class="agent-brand" href="index.html#home"><img src="assets/shanhai-logo.png" alt=""><span><strong>山海鲜途</strong><small>WENZHOU FRESH ROUTE</small></span></a>
       <a class="agent-back" href="index.html#home">⌂ <span>返回平台首页</span></a>
-      <button class="agent-new-chat" data-action="new-chat">＋ <span>开启新对话</span></button>
+      <button class="agent-new-chat" type="button" data-action="new-chat">＋ <span>开启新对话</span></button>
       <div class="agent-side-label">工作流</div>
       <nav class="agent-side-nav" aria-label="助手工作流">
         <a href="index.html#catalog"><span>◈</span>选品推荐</a>
         <a href="index.html#request-create"><span>▤</span>采购需求整理</a>
-        <a class="active" href="index.html#services"><span>◎</span>出海资料准备</a>
+        <a href="index.html#services"><span>◎</span>出海资料准备</a>
       </nav>
-      <div class="agent-side-label recent-label">最近对话</div>
-      <button class="agent-history active" data-action="example" data-example="docs"><span>▤</span><span>文成粉丝出海资料准备<small>演示会话</small></span><b>···</b></button>
-      <button class="agent-history" data-action="example" data-example="sourcing"><span>◈</span><span>新加坡餐饮渠道选品<small>演示会话</small></span></button>
+      <div class="agent-side-label recent-label">历史对话</div>
+      <nav class="agent-history-list" id="agent-history" aria-label="历史对话"></nav>
       <a class="agent-side-footer" href="workspace.html">▣ <span>工作区 · 海外采购</span> ↗</a>
     </aside>
+
     <section class="agent-main">
       <header class="agent-topbar">
         <div class="agent-profile"><img src="assets/haihe-agent-avatar.jpg" alt=""><span><strong>海禾 <b>✦ AI 辅助</b></strong><small>选品与出海助手</small></span></div>
-        <div class="agent-top-actions"><a href="index.html#home">返回平台</a><button data-action="help">ⓘ 帮助</button><button class="agent-example-button" data-action="example" data-example="docs">▤ 示例对话</button></div>
+        <div class="agent-top-actions">
+          <button type="button" class="agent-language" data-action="language">◉ 中文 / EN</button>
+          <button type="button" data-action="help">ⓘ 帮助</button>
+          <button type="button" class="agent-example-button" data-action="example">▤ 示例对话</button>
+        </div>
       </header>
+
       <div class="agent-columns">
-        <section class="agent-chat">
-          <div class="agent-chat-heading"><p class="section-kicker">EXPORT READINESS · DEMO CONVERSATION</p><h1 id="thread-title">文成粉丝出海资料准备</h1><p>先梳理资料，再由专业主体核实。</p></div>
-          <div class="agent-messages" id="agent-messages" aria-live="polite"></div>
-          <div class="agent-action-row"><button class="agent-primary-action" data-action="generate">▤ 整理资料清单</button><button class="agent-secondary-action" data-action="human">♧ 申请人工协助</button><button class="agent-text-action" data-action="upload">⌁ 上传已有资料</button><input type="file" id="agent-file" hidden></div>
-          <form id="agent-form" class="agent-composer"><button type="button" aria-label="添加文件" data-action="upload">⌁</button><input id="agent-input" autocomplete="off" placeholder="继续补充你的需求…"><button type="submit" aria-label="发送消息">➜</button></form>
-          <small class="agent-local-note">演示助手 · 对话仅保存在当前浏览器，不会提交或发送给平台人员</small>
+        <section class="agent-chat" aria-label="AI 对话">
+          <div class="agent-chat-heading"><p class="section-kicker">SHANHAI AI · CONVERSATION</p><h1 id="thread-title">新的对话</h1><p id="thread-subtitle">告诉我你要寻找的产品、采购条件或出海资料。</p></div>
+          <div class="agent-messages" id="agent-messages" aria-live="polite" aria-relevant="additions text"></div>
+          <div class="agent-action-row">
+            <button type="button" class="agent-primary-action" data-prompt="请整理一份出海资料准备清单">▤ 整理资料清单</button>
+            <button type="button" class="agent-secondary-action" data-action="human">♧ 申请人工协助</button>
+            <button type="button" class="agent-text-action" data-action="upload">⌁ 上传已有资料</button>
+            <input type="file" id="agent-file" hidden>
+          </div>
+          <form id="agent-form" class="agent-composer">
+            <button type="button" aria-label="添加文件" data-action="upload">⌁</button>
+            <textarea id="agent-input" rows="1" maxlength="2000" autocomplete="off" placeholder="继续补充你的需求…" aria-label="输入消息"></textarea>
+            <button type="submit" aria-label="发送消息">➜</button>
+          </form>
+          <small class="agent-local-note">演示工作区 · 对话保存在当前浏览器，不会提交或发送给平台人员</small>
         </section>
-        <aside class="agent-context">
-          <article class="agent-side-card"><h2>▤ <span>本次准备范围</span></h2><dl><div><dt>产品</dt><dd id="context-product">文成粉丝</dd></div><div><dt>市场</dt><dd id="context-market">新加坡</dd></div><div><dt>当前阶段</dt><dd>资料整理</dd></div></dl><hr><div class="agent-side-status"><span>产品规格</span><b>◷ 待补充</b></div><div class="agent-side-status"><span>进口主体</span><b>◷ 待确认</b></div></article>
-          <article class="agent-side-card"><h2>▤ <span>你可以先做的事</span></h2><button class="agent-next-step" data-action="generate"><i>1</i><span>整理产品规格表</span>›</button><button class="agent-next-step" data-action="upload"><i>2</i><span>补充包装与标签信息</span>›</button><button class="agent-next-step" data-action="human"><i>3</i><span>确认进口商联系人</span>›</button></article>
+
+        <aside class="agent-context" aria-label="对话辅助信息">
+          <article class="agent-side-card">
+            <h2>▤ <span>本次协作范围</span></h2>
+            <dl>
+              <div><dt>产品</dt><dd id="context-product">尚未选择</dd></div>
+              <div><dt>市场</dt><dd id="context-market">待补充</dd></div>
+              <div><dt>当前阶段</dt><dd id="context-stage">对话中</dd></div>
+            </dl>
+            <hr>
+            <div class="agent-side-status"><span>供货信息</span><b id="context-supply">待确认</b></div>
+            <div class="agent-side-status"><span>市场规则</span><b id="context-rules">待核实</b></div>
+          </article>
+          <article class="agent-side-card">
+            <h2>▤ <span>你可以先做的事</span></h2>
+            <button type="button" class="agent-next-step" data-prompt="帮我整理一份采购需求需要的信息"><i>1</i><span>整理采购需求信息</span>›</button>
+            <button type="button" class="agent-next-step" data-prompt="温州有哪些特色农产品适合采购？"><i>2</i><span>浏览温州特色选品</span>›</button>
+            <button type="button" class="agent-next-step" data-prompt="农产品出口前通常需要关注哪些资料？"><i>3</i><span>了解出海资料准备</span>›</button>
+          </article>
           <article class="agent-side-card agent-professional"><h2>♧ <span>专业服务协作</span></h2><p>检测、标签审核及报关由对应专业服务方独立确认。</p><a href="index.html#services">查看服务中心 ↗</a></article>
         </aside>
       </div>
     </section>
   </main>
-  <div class="toast-root" id="toast-root" aria-live="polite"></div>
-  <script src="assistant.js?v=20261020-agent-standalone1"></script>
+  <script src="assistant.js?v=20261020-agent-workspace3"></script>
 </body>
 </html>
