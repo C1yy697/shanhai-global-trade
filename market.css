@@ -911,6 +911,15 @@ body.agent-route-active #market-root { min-height: 100dvh; }
 .agent-check-row > span { color: #76827b; font-size: 12px; }
 .agent-check-row > small { justify-self: end; padding: 5px 8px; border-radius: 14px; background: #fff3df; color: #996317; font-size: 11px; white-space: nowrap; }
 .agent-checklist > footer { padding: 9px 0 7px; color: #7e8982; font-size: 11px; line-height: 1.5; }
+.agent-action-row { align-items: center; gap: 8px; padding: 9px 0 7px; }
+.agent-primary-action, .agent-secondary-action, .agent-text-action { min-height: 36px; padding-inline: 15px; border-radius: 20px; font-size: 13px; white-space: nowrap; }
+.agent-text-action { padding-inline: 7px; color: #66766e; }
+.agent-composer { min-height: 54px; gap: 8px; padding: 6px 8px 6px 10px; border-radius: 17px; }
+.agent-composer > button:first-child { width: 34px; height: 36px; color: #718078; font-size: 19px; }
+.agent-composer > button:last-child { width: 38px; height: 38px; border-radius: 50%; background: #17634e; font-size: 19px; }
+.agent-composer > button:last-child:hover { background: #0e503e; }
+.agent-composer textarea { min-width: 0; min-height: 39px; max-height: 130px; flex: 1; margin: 0; padding: 8px 2px; border: 0; outline: 0; resize: none; background: transparent; color: #244238; font: inherit; font-size: 14px; line-height: 1.5; }
+.agent-composer textarea::placeholder { color: #9aa59d; }
 @media (max-width: 820px) {
   .agent-history-list { display: flex; overflow-x: auto; }
   .agent-history-list .agent-history { min-width: 190px; }
