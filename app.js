@@ -179,7 +179,8 @@
 
   function dashboard() {
     const pending = state.batches.filter(b => ['待补材料', '合规复核中', '准备出运'].includes(b.status)).length;
-    const docRate = Math.round(state.batches.reduce((sum, b) => sum + Object.values(b.docs || {}).filter(Boolean).length, 0) / Math.max(1, state.batches.reduce((sum, b) => sum + Object.keys(b.docs || {}).length, 0)) * 100);
+    const totalDocFields = state.batches.reduce((sum, b) => sum + Object.keys(b.docs || {}).length, 0);
+    const docRate = totalDocFields ? Math.round(state.batches.reduce((sum, b) => sum + Object.values(b.docs || {}).filter(Boolean).length, 0) / totalDocFields * 100) : null;
     const batches = [...state.batches].sort((a, b) => b.created.localeCompare(a.created)).slice(0, 4);
     const months = ['5月', '6月', '7月', '8月', '9月', '10月'];
     const exports = [31, 48, 43, 66, 73, Math.min(90, 34 + state.batches.length * 12)];
@@ -189,7 +190,7 @@
       <section class="metrics-grid">
         <article class="metric-card"><div class="metric-top"><span>管理中批次</span><span class="metric-icon">▤</span></div><div class="metric-value">${state.batches.length}</div><div class="metric-foot"><strong>+2</strong> 本月新增</div></article>
         <article class="metric-card"><div class="metric-top"><span>待处理事项</span><span class="metric-icon" style="background:var(--amber-soft);color:var(--amber)">!</span></div><div class="metric-value">${pending}</div><div class="metric-foot">材料与市场规则待复核</div></article>
-        <article class="metric-card"><div class="metric-top"><span>资料归集率</span><span class="metric-icon" style="background:var(--blue-soft);color:var(--blue)">↗</span></div><div class="metric-value">${docRate}<small style="font-size:13px">%</small></div><div class="metric-foot">已登记材料 / 应登记字段</div></article>
+        <article class="metric-card"><div class="metric-top"><span>资料归集率</span><span class="metric-icon" style="background:var(--blue-soft);color:var(--blue)">↗</span></div><div class="metric-value">${docRate === null ? '—' : `${docRate}<small style="font-size:13px">%</small>`}</div><div class="metric-foot">${docRate === null ? '暂无资料字段，无法计算' : '已登记材料 / 应登记字段'}</div></article>
         <article class="metric-card"><div class="metric-top"><span>服务目标市场</span><span class="metric-icon" style="background:#f5efe5;color:#a2702d">◎</span></div><div class="metric-value">3</div><div class="metric-foot">日本 · 欧盟 · 东南亚</div></article>
       </section>
       <section class="dashboard-grid">
@@ -246,7 +247,7 @@
     const total = results.length;
     return `${pageHeading('合规校验', '按目标市场查看资料完整度；校验结果仅供业务准备参考。', '<button class="button" data-action="print">打印本页</button>')}
       <section class="panel" style="margin-bottom:14px"><div class="batch-selector"><div class="field"><label class="field-label" for="compliance-batch">出口批次</label><select class="control" id="compliance-batch" style="width:100%">${state.batches.map(b => `<option value="${esc(b.id)}" ${b.id === batch.id ? 'selected' : ''}>${esc(b.id)} · ${esc(b.product)}</option>`).join('')}</select></div><div class="field"><label class="field-label" for="compliance-market">目标市场</label><select class="control" id="compliance-market" style="width:100%">${['日本','欧盟','东南亚'].map(m => `<option ${m === market ? 'selected' : ''}>${m}</option>`).join('')}</select></div><button class="button primary" data-action="run-check">重新校验</button></div></section>
-      <div class="split-layout"><section class="panel"><div class="panel-heading"><div><h2>${esc(market)} · 资料检查清单</h2><p>${esc(batch.product)} / ${esc(batch.id)} · 命中 ${total} 条已启用演示规则</p></div><span class="status ${total === 0 ? 'info' : missing ? 'warn' : 'ok'}">${total === 0 ? '暂不适用' : missing ? '待补资料' : '资料齐全'}</span></div><div class="rule-list">${results.map(r => `<div class="rule-result"><div><strong>${esc(r.name)}</strong><small>${esc(r.detail)}</small><small>规则来源：${esc(r.source)} · 规则编号：${esc(r.id)}</small></div>${statusTag(r.message)}</div>`).join('') || '<div class="empty-state"><strong>当前没有可用规则，无法判断资料完整性</strong><p>请在市场规则页启用适用的演示规则；真实出口要求仍需人工核实。</p></div>'}</div></section>
+      <div class="split-layout"><section class="panel"><div class="panel-heading"><div><h2>${esc(market)} · 资料检查清单</h2><p>${esc(batch.product)} / ${esc(batch.id)} · 命中 ${total} 条已启用演示规则</p></div><span class="status ${total === 0 ? 'info' : missing ? 'warn' : 'ok'}">${total === 0 ? '无法判断' : missing ? '待补资料' : '资料齐全'}</span></div><div class="rule-list">${results.map(r => `<div class="rule-result"><div><strong>${esc(r.name)}</strong><small>${esc(r.detail)}</small><small>规则来源：${esc(r.source)} · 规则编号：${esc(r.id)}</small></div>${statusTag(r.message)}</div>`).join('') || '<div class="empty-state"><strong>暂无适用规则，无法判断资料完整性</strong><p>请在市场规则页启用适用的演示规则；真实出口要求仍需人工核实。</p></div>'}</div></section>
       <aside class="panel"><h2 style="font-size:13px;margin-bottom:5px">校验摘要</h2><p style="font-size:10px;color:var(--muted);margin-bottom:0">基于批次已登记字段进行确定性检查。</p><div class="result-summary ${total === 0 ? '' : missing ? 'warn' : 'ok'}"><span class="result-count">${total === 0 ? '—' : `${total - missing}/${total}`}</span><span><strong>${total === 0 ? '暂无已启用的适用规则' : missing ? `${missing} 项需要处理` : '演示清单已登记'}</strong><small>${total === 0 ? '无法判断资料完整性' : '清单完成数 / 命中规则数'}</small></span></div><div class="source-note">此页面使用本地示例规则，不代表海关、检验检疫或认证机构的正式判断。正式业务应由责任人员依据目标市场官方现行要求复核。</div><div style="margin-top:14px"><button class="button" data-action="edit-batch" data-id="${esc(batch.id)}">维护批次资料</button></div></aside></div>`;
   }
 

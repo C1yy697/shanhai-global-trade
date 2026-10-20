@@ -67,6 +67,26 @@
   };
   function productInfo(product) { const base = productFacts[product?.id] || { productCode: `WZ-PR-${String(product?.id || 'XX').toUpperCase()}`, harvest: product?.supply || '供货窗口待确认', amount: '以合作社确认为准', moq: '询价确认', package: product?.unit || '待确认', docs: '检测资料状态：待核验', cold: '运输条件待确认', updated: '2026-10-18（演示记录）', supplier: '对应供应主体（演示）', entityType: '企业/合作社', sourceStatus: '待授权核验' }; const update = [...(state.calendarUpdates || [])].reverse().find(item => item.product === product?.name); return update ? { ...base, harvest: `${update.month} · ${update.availability}`, amount: update.amount, updated: `${update.created}（本地记录）` } : base; }
   function requestStatus(request) { if (request.status === '已完成') return '已完成'; if (request.deadline && request.deadline < new Date().toISOString().slice(0, 10)) return '已过期'; return request.status || '有效'; }
+  function quantityRange(value) {
+    const text = String(value || '');
+    const numbers = [...text.matchAll(/\d+(?:\.\d+)?/g)].map(match => Number(match[0]));
+    const unit = text.match(/箱|盒|袋|kg|千克|吨/i)?.[0]?.toLowerCase() || '';
+    if (!numbers.length) return null;
+    return { min: numbers[0], max: numbers.length > 1 ? numbers[1] : numbers[0], unit };
+  }
+  function quantityAssessment(request, batch, facts) {
+    if (!batch) return ['未关联批次，无法比较供货量', '关联明确批次，并确认数量与起订量'];
+    const demand = quantityRange(request.quantity);
+    const available = quantityRange(batch.quantity) || quantityRange(facts.amount);
+    const minimum = quantityRange(facts.moq);
+    if (!demand || !available) return ['数量信息不完整，暂不能判断', '补充带单位的需求量、批次可供量和起订量'];
+    if (demand.unit && available.unit && demand.unit !== available.unit) return [`单位不一致（需求 ${demand.unit} / 批次 ${available.unit}），无法直接比较`, '统一计量单位并复核批次可供量'];
+    if (minimum && demand.unit && minimum.unit && demand.unit !== minimum.unit) return [`起订量单位 ${minimum.unit} 与需求单位 ${demand.unit} 不一致`, '确认统一单位后的起订量'];
+    const enough = available.max >= demand.max;
+    const meetsMinimum = !minimum || demand.min >= minimum.min;
+    const assessment = enough && meetsMinimum ? '数量区间符合演示档案，待供应方复核' : !enough ? '演示批次上限低于需求，需确认能否补量' : '需求低于演示起订量，需协商';
+    return [assessment, '供应方核实本批次可供量、起订量及计量单位'];
+  }
   function allRequests() { return [...requests, ...(state.purchaseRequests || [])].map(r => ({ ...r, status: requestStatus(r), market: r.market || (r.id === 'r1' ? '日本' : r.id === 'r2' ? '新加坡' : '日本'), city: r.city || '待补充', deliveryDate: r.deliveryDate || '待确认', packaging: r.packaging || '待确认', labelLanguage: r.labelLanguage || '待确认', requirements: r.requirements || '检测/认证要求待买家确认', deliveryLocation: r.deliveryLocation || '待确认', isDemo: r.isDemo !== false })); }
   function requestById(id) { return allRequests().find(item => item.id === id); }
   function setRoute(route, param = '') { const next = ['home', 'catalog', 'booklet', 'requests', 'request-category', 'request-create', 'request-response', 'quotes', 'quote-thread', 'login', 'register', 'inquiry', 'buyer', 'batch-inquiry', 'supplier', 'services', 'farmer-register', 'calendar', 'feedback', 'service-request', 'business-model', 'channels'].includes(route) ? route : 'home'; const target = param ? `#${next}/${encodeURIComponent(param)}` : `#${next}`; if (location.hash !== target) history.pushState(null, '', target); currentRoute = next; render(); window.scrollTo({ top: 0, behavior: 'smooth' }); }
@@ -178,11 +198,19 @@
     if (!item) return `<div class="workflow-page market-shell"><div class="empty-panel"><strong>需求不存在</strong><a class="outline-button" href="#requests">返回采购需求</a></div></div>`;
     const product = productForRequest(item);
     const facts = productInfo(product);
-    const checks = [['供货量', `需求：${item.quantity}；批次可供量与起订量尚未结构化核验`, '选择具体批次，核对可供量是否覆盖需求及起订量'], ['交付时间', item.deliveryDate === '待确认' ? '买家未提供交期，无法判断供货窗口' : `需求交期：${item.deliveryDate}；供货窗口：${facts.harvest}`, '确认采收/加工窗口、运输时间与到货日期'], ['包装与语言', `包装：${item.packaging}；标签语言：${item.labelLanguage}`, '确认包装规格、标签语言及样稿'], ['检测与冷链', `要求：${item.requirements}；运输：${facts.cold}`, '补充检测文件并确认温控方案']];
     const linkedBatch = (window.ShanhaiBridge?.batches() || []).find(candidate => candidate.requestId === item.id && (!candidate.productId || candidate.productId === facts.productCode));
     const requestedBatchId = item.batchId || linkedBatch?.id || (item.id === 'r1' ? facts.batchId : '');
     const batch = requestedBatchId ? window.ShanhaiBridge?.getBatch(requestedBatchId) : null;
     const batchId = batch?.id || '';
+    const [quantityResult, quantityNext] = quantityAssessment(item, batch, facts);
+    const docs = batch?.docs || {};
+    const docStatus = (key, name) => docs[key] ? `${name}已登记，待复核有效期与适用范围` : `${name}未登记/待确认`;
+    const checks = [
+      ['供货量', quantityResult, quantityNext],
+      ['交付时间', item.deliveryDate === '待确认' ? '买家未提供交期，暂不能判断供货窗口' : `需求交期：${item.deliveryDate}；供货窗口：${facts.harvest}（需人工确认）`, '确认采收/加工窗口、运输时间与到货日期'],
+      ['包装与语言', `需求包装：${item.packaging}；标签语言：${item.labelLanguage}${batch ? `；批次包装记录：${batch.package || '未登记'}` : ''}`, '逐项核对包装规格、标签语言和买家样稿'],
+      ['检测与冷链', `${docStatus('testReport', '检测资料')}；${docStatus('coldChain', '冷链记录')}`, `需求：${item.requirements}；核实检测资料并确认温控方案`]
+    ];
     const relatedUrl = batchId ? `workspace.html#batch-detail/${encodeURIComponent(batchId)}` : `workspace.html#batch-new?productId=${encodeURIComponent(product.id)}&productName=${encodeURIComponent(product.name)}&requestId=${encodeURIComponent(item.id)}`;
     return `<div class="workflow-page market-shell"><div class="page-hero"><div><p class="section-kicker">Request response / 需求响应</p><h1>${esc(item.title)}</h1><p>${esc(item.id)} · ${esc(item.buyer)} · ${esc(item.status)}${item.isDemo ? ' · 模拟案例' : ''}</p></div><a class="outline-button" href="#requests">返回采购需求</a></div><div class="workflow-layout"><article class="workflow-guide"><span class="tag">${esc(item.category)}</span><h2>${esc(item.market)} / ${esc(item.city)}</h2><p>${esc(item.note)}</p><span class="row-label">采购数量</span><strong class="workflow-value">${esc(item.quantity)}</strong><span class="row-label">响应截止</span><strong class="workflow-value">${esc(item.deadline)}</strong><div class="source-note">交货期：${esc(item.deliveryDate)}<br>交付地点：${esc(item.deliveryLocation)}<br>包装/标签：${esc(item.packaging)} / ${esc(item.labelLanguage)}</div></article><section class="workspace-panel workflow-form-panel"><div class="panel-heading"><div><p class="section-kicker">Explainable match / 逐项匹配</p><h2>供应前置核对清单</h2></div><span class="panel-note">关联产品 ${facts.productCode}</span></div><div class="match-checklist">${checks.map(([label, result, next]) => `<div class="match-check"><strong>${esc(label)}</strong><span>${esc(result)}</span><small>供应方下一步：${esc(next)}</small></div>`).join('')}</div><div class="source-note" style="margin:14px 0">规则及产品资料为演示信息，状态待供应方和专业人员核实。批次编号：${esc(batchId || '尚未建立')}</div><div class="workflow-actions"><a class="outline-button" href="${relatedUrl}">${batchId ? '打开关联批次' : '创建关联批次'} ↗</a>${item.status === '已过期' || item.status === '已完成' ? '<span class="status-pill expired">历史/已完成线索不可提交响应</span>' : item.status === '待核验' ? '<span class="status-pill pending">待核验线索，暂不可提交响应</span>' : '<button class="dark-button" data-action="open-response-form" data-id="'+esc(item.id)+'">继续填写响应 ↗</button>'}</div></section></div><section class="workspace-panel" id="response-form-panel" hidden><div class="panel-heading"><div><p class="section-kicker">Supplier reply / 供应商响应</p><h2>填写本地演示响应</h2></div><span class="panel-note">记录不代表已发送给对方</span></div><form id="request-response-form"><input type="hidden" name="requestId" value="${esc(item.id)}"><input type="hidden" name="batchId" value="${esc(batchId || '')}"><div class="form-grid"><div class="field"><label for="response-company">供应商或合作社名称</label><input id="response-company" name="company" required></div><div class="field"><label for="response-quantity">可供数量</label><input id="response-quantity" name="quantity" required></div><div class="field"><label for="response-period">可供周期</label><input id="response-period" name="period" required></div><div class="field"><label for="response-contact">联系人</label><input id="response-contact" name="contact" required></div><div class="field full"><label for="response-note">响应说明</label><textarea id="response-note" name="note" required></textarea></div></div><div class="workflow-actions"><button class="dark-button" type="submit">保存响应记录 ↗</button></div></form></section></div>`;
   }
