@@ -372,6 +372,34 @@ table th, table td { text-align: center; vertical-align: middle; }
 .value-service-grid p { min-height: 42px; margin: 0 0 9px; color: var(--muted); font-size: 10px; line-height: 1.7; }
 .business-footnote { margin: 14px 0 0; color: #78847d; font-size: 9px; line-height: 1.7; }
 .business-actions { display: flex; justify-content: flex-end; gap: 8px; margin-top: 18px; }
+.revenue-simulator { margin-top: 24px; padding: 20px 22px; border: 1px solid #d8e3d9; border-radius: 7px; background: #fff; }
+.revenue-simulator > .panel-heading { align-items: start; }
+.revenue-simulator .panel-heading h2 { margin: 0 0 5px; color: var(--deep); font-size: 20px; }
+.revenue-simulator .panel-heading p:not(.section-kicker) { margin: 0; color: var(--muted); font-size: 13px; }
+.scenario-layout { display: grid; grid-template-columns: minmax(0,1.25fr) minmax(280px,.75fr); gap: 22px; align-items: start; }
+.scenario-inputs { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 12px; }
+.scenario-field { display: grid; align-content: start; gap: 6px; min-width: 0; color: #526459; font-size: 13px; font-weight: 700; }
+.scenario-field input:not([type="range"]) { width: 100%; min-height: 40px; padding: 8px 10px; border: 1px solid #ccd7cc; border-radius: 5px; color: var(--ink); font: inherit; font-weight: 500; }
+.scenario-rate { grid-template-columns: 1fr auto; align-content: center; }
+.scenario-rate output { color: var(--forest); font-size: 14px; font-weight: 800; }
+.scenario-rate input { grid-column: 1 / -1; width: 100%; accent-color: var(--forest); }
+.scenario-results { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 8px; padding: 11px; border: 1px solid #e4ebe4; border-radius: 6px; background: #f8faf7; }
+.scenario-results > div { min-width: 0; padding: 10px; background: #fff; border-radius: 4px; }
+.scenario-results span, .scenario-results strong { display: block; }
+.scenario-results span { color: #758178; font-size: 12px; line-height: 1.45; }
+.scenario-results strong { margin-top: 7px; color: var(--deep); font-size: 18px; font-variant-numeric: tabular-nums; }
+.scenario-results .scenario-total { border-top: 2px solid #8caf92; }
+.scenario-results .scenario-balance { grid-column: 1 / -1; background: #edf5ec; }
+.scenario-balance strong { color: var(--forest); font-size: 22px; }
+.scenario-balance strong.negative { color: #a54e43; }
+.scenario-note { margin: 13px 0 0; color: #78847d; font-size: 12px; line-height: 1.65; }
+.cost-structure { margin-top: 26px; padding: 18px 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+.cost-structure .panel-heading { margin-bottom: 13px; }
+.cost-structure .panel-heading h2 { margin: 0; color: var(--deep); font-size: 19px; }
+.cost-grid { display: grid; grid-template-columns: repeat(4,minmax(0,1fr)); gap: 16px; }
+.cost-grid article { display: grid; gap: 5px; padding-left: 12px; border-left: 2px solid #9bb79e; }
+.cost-grid strong { color: var(--deep); font-size: 14px; }
+.cost-grid span { color: var(--muted); font-size: 12px; line-height: 1.5; }
 body { font-size: 16px; }
 small, .hero-note, .site-footer small, .assistant-status, .assistant-messages, .assistant-form input, .assistant-prompts button { font-size: max(13px, 1em); }
 .site-nav a, .nav-menu, .text-button { font-size: 15px; }
@@ -422,6 +450,9 @@ small, .hero-note, .site-footer small, .assistant-status, .assistant-messages, .
   .calendar-grid { grid-template-columns: repeat(2, minmax(0,1fr)); }
   .service-grid { grid-template-columns: 1fr; }
   .business-columns { grid-template-columns: 1fr; }
+  .scenario-layout { grid-template-columns: 1fr; }
+  .scenario-inputs { grid-template-columns: repeat(2,minmax(0,1fr)); }
+  .cost-grid { grid-template-columns: repeat(2,minmax(0,1fr)); }
 }
 @media (max-width: 680px) {
   .site-header { height: 62px; padding-inline: 14px; }
@@ -469,6 +500,10 @@ small, .hero-note, .site-footer small, .assistant-status, .assistant-messages, .
   .business-disclaimer { display: block; }
   .business-disclaimer strong { display: block; margin-bottom: 4px; }
   .business-actions { display: grid; grid-template-columns: 1fr; }
+  .scenario-inputs { grid-template-columns: 1fr 1fr; gap: 9px; }
+  .scenario-results { grid-template-columns: 1fr 1fr; }
+  .scenario-results strong { font-size: 16px; }
+  .cost-grid { gap: 13px 10px; }
   .section { padding: 46px 15px; }
   .section-head { display: block; }
   .section-head > p { margin-top: 11px; }
