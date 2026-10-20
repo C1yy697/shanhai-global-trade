@@ -147,33 +147,37 @@
     return `<div class="services-page market-shell"><div class="page-hero"><div><p class="section-kicker">Export readiness / 出海准备</p><h1>把资料缺口变成下一步行动</h1><p>围绕具体产品和目标市场查看已有资料、待补材料、官方来源与咨询入口，明确区分平台信息整理、买家要求和专业机构判断。</p></div><button class="dark-button" data-action="new-service">提交服务需求 ↗</button></div><div class="service-disclaimer"><strong>服务边界</strong><span>平台负责信息整理、采购对接、进度记录和服务转介；法律、检测、认证等专业判断由独立机构负责。</span></div><div class="service-grid">${serviceItems.map(s => `<article class="service-card"><span class="service-icon">${s.type === '人工服务' ? '文' : s.type === '专业机构转介' ? '专' : s.type === '协同服务' ? '协' : '指'}</span><div><span class="tag">${esc(s.status)}</span><h2>${esc(s.name)}</h2><small>${esc(s.type)}</small><p>${esc(s.detail)}</p></div><button class="mini-link" data-action="new-service">申请服务 ↗</button></article>`).join('')}</div><section class="workspace-panel service-record-panel"><div class="panel-heading"><div><p class="section-kicker">Service records / 服务记录</p><h2>我的咨询与资料需求</h2></div><span class="panel-note">${state.serviceRequests.length} 条记录</span></div>${requests}</section></div>`;
   }
   function businessModelPage() {
-    const plans = [
-      { name: '试点档', price: '免费', unit: '限邀约企业', features: ['企业档案与基础产品卡', '采购需求浏览与询价', '1个活跃可供批次'], note: '用于首批试点伙伴验证流程' },
-      { name: '成长会员', price: '¥299', unit: '/月 · 建议试点价', features: ['最多20个产品与批次', '双语选品册与询价跟进', '需求匹配与月度数据复盘'], note: '正式定价需访谈供应商后确认' },
-      { name: '企业协同', price: '面议', unit: '按服务范围报价', features: ['多账号与多基地管理', '批次资料协同与服务转介', '专属客户成功与业务复盘'], note: '按企业规模与服务内容议定' }
-    ];
     const services = [
-      ['资料与翻译', '规格核对、双语产品卡、标签文本整理'],
-      ['法律与认证', '转介贸易法律、检测、认证及标签审核机构'],
-      ['履约协同', '对接报关、冷链、物流、样品和试单服务商']
+      ['双语产品卡', '¥300 / 款', '1款产品中英介绍、规格整理与1轮修订'],
+      ['资料准备包', '¥1,000 / 项', '1家企业、1个目的地、最多3款产品；交付规格表、缺项清单和询盘回复模板'],
+      ['样品协调', '¥800–1,500 / 次', '最多3款产品；记录寄样进度并整理1名买家反馈']
     ];
     const costs = [
-      ['平台运营', '产品维护、客户支持与内容运营'],
-      ['业务拓展', '渠道试点、采购方开发与商机核验'],
-      ['服务交付', '翻译、样品协调与第三方专业服务'],
-      ['技术与风控', '系统维护、隐私保护与合同审查']
+      ['会员服务交付', '¥60 / 家 / 月；包含常规维护'],
+      ['订单协调', '¥300 / 笔；按月订单量估算'],
+      ['资料包制作', '¥450 / 项；按实际交付核算'],
+      ['渠道与风险预留', '服务费的20%渠道支出；总收入的2%退款坏账'],
+      ['固定运营成本', '人员基础报酬、平台维护和日常运营'],
+      ['业务与风控', '业务开发、隐私保护、合同与财务管理']
+    ];
+    const milestones = [
+      ['第1个月', '访谈供需双方，选定3–5款产品并制作收费样品', '确认有预算、有期限的真实需求'],
+      ['第2个月', '销售资料准备包，完成交付、验收与收款', '争取3笔真实服务回款并核算交付成本'],
+      ['第3个月', '推广会员，跟进首笔贸易试单', '争取10家付费会员，观察续费和订单进展']
     ];
     return `<div class="business-model-page market-shell">
-      <div class="page-hero"><div><p class="section-kicker">B2B business model / 盈利模式</p><h1>以供需撮合和出口服务形成可持续收入</h1><p>平台面向温州供应商和海外企业买家，通过会员订阅、成交协同服务和专业服务转介获得收入。所有费率均为试点讨论值，正式启用前需完成客户访谈、成本核算和合同审查。</p></div><span class="status-pill pending">测算方案 · 尚未启用收费</span></div>
-      <div class="business-disclaimer"><strong>演示边界</strong><span>当前平台不收款、不签约、不结算；下方价格和测算仅用于商业讨论，不代表现有客户、订单或已实现收入。</span></div>
-      <section class="b2b-flow" aria-label="收入形成流程"><div><small>01 · 供给建档</small><strong>温州企业 / 合作社 / 果园</strong><span>建立企业档案和可供批次</span></div><b>→</b><div><small>02 · 需求撮合</small><strong>核对采购条件与供货能力</strong><span>询价、样品和资料协同</span></div><b>→</b><div><small>03 · 服务交付</small><strong>海外企业采购与复购</strong><span>按约定结算并记录履约反馈</span></div></section>
-      <div class="business-columns">
-        <section><div class="panel-heading"><div><p class="section-kicker">Supplier membership / 订阅收入</p><h2>供应商会员方案</h2></div><span class="panel-note">建议试点档位</span></div><div class="membership-grid">${plans.map((plan, index) => `<article class="membership-plan ${index === 1 ? 'featured' : ''}"><span class="tag ${index === 1 ? 'amber' : ''}">${index === 0 ? '试点伙伴' : index === 1 ? '建议方案' : '定制协同'}</span><h3>${esc(plan.name)}</h3><p class="membership-price">${esc(plan.price)}<small>${esc(plan.unit)}</small></p><ul>${plan.features.map(feature => `<li>${esc(feature)}</li>`).join('')}</ul><small class="plan-note">${esc(plan.note)}</small><a class="outline-button" href="#register/supplier">申请供应商试点 ↗</a></article>`).join('')}</div></section>
-        <section class="revenue-panel"><div class="panel-heading"><div><p class="section-kicker">Transaction service / 成交协同</p><h2>撮合与履约服务费</h2></div><span class="tag amber">书面约定</span></div><div class="commission-rate">1%–3%<small>仅按双方确认的成交金额讨论</small></div><p>只针对平台实际提供的询价跟进、样品协调或履约协同服务。买卖双方明确服务范围、承担方和结算节点后，再在合同中约定费用。</p><div class="revenue-step"><span>需求核验</span><span>订单确认</span><span>服务交付后结算</span></div><a class="outline-button" href="#requests">查看采购需求 ↗</a></section>
+      <div class="page-hero"><div><p class="section-kicker">B2B business model / 盈利模式</p><h1>先把出海服务做成可验收的收入</h1><p>以温州农产品企业和合作社为主要付费客户，先通过双语资料与样品协调获得首笔回款，再用会员服务形成持续收入，最后从真实订单协同中收取服务费。</p></div><span class="status-pill pending">试点建议 · 尚未启用收费</span></div>
+      <div class="business-disclaimer"><strong>演示与收费边界</strong><span>页面价格和测算为试点假设，当前平台不收款、不签约、不结算。买家可免费浏览、发布需求和询价；小农户可通过合作社组织供货并免费基础登记。演示记录不代表真实客户、订单或收入。</span></div>
+      <section class="b2b-flow" aria-label="收入形成路径"><div><small>01 · 服务先行</small><strong>资料整理 / 样品协调</strong><span>明确范围、报价并交付验收</span></div><b>→</b><div><small>02 · 持续维护</small><strong>供应商会员订阅</strong><span>更新产品批次、询盘和月度复盘</span></div><b>→</b><div><small>03 · 订单协同</small><strong>真实试单与履约跟进</strong><span>完成约定服务后按净货款结算</span></div></section>
+      <section class="workspace-panel revenue-offers"><div class="panel-heading"><div><p class="section-kicker">Pay per service / 按次服务先行</p><h2>客户为具体交付付费</h2><p>初期重点推广¥1,000资料准备包，便于说清价值、核算工时并验证首笔回款。</p></div><span class="panel-note">第三方及运输费用另计</span></div><div class="offer-grid">${services.map(([title, price, detail]) => `<article><div class="offer-heading"><h3>${esc(title)}</h3><strong>${esc(price)}</strong></div><p>${esc(detail)}</p><a class="mini-link" href="#service-request/${encodeURIComponent(title)}">登记服务需求 ↗</a></article>`).join('')}</div><p class="business-footnote">资料整理以供应商确认信息为基础，不代替标签审核、检测或认证。第三方及运输费用须另行报价并经客户确认；建议启动前收取50%，交付验收后结清。</p></section>
+      <div class="business-columns revenue-stream-columns">
+        <section class="workspace-panel membership-offer"><div class="panel-heading"><div><p class="section-kicker">Recurring revenue / 会员订阅</p><h2>成长会员 ¥299 / 月 / 家</h2></div><span class="tag amber">试点建议价</span></div><ul class="membership-includes"><li>最多20个产品与批次记录</li><li>每月更新2张标准双语产品卡</li><li>每月1份询盘与供货复盘</li></ul><p>适合需要持续维护资料和跟进询盘的企业。首批可试用30天后按月订阅；超出包含范围的翻译和复杂沟通另行报价，已包含服务不重复收费，也不承诺固定询盘或成交数量。</p><div class="free-access-note"><strong>基础功能免费</strong><span>基础展示、需求浏览和基础询价；小农户基础登记。</span></div></section>
+        <section class="revenue-panel commission-offer"><div class="panel-heading"><div><p class="section-kicker">Success-based / 成交服务费</p><h2>真实订单按净货款1.5%</h2></div><span class="tag amber">须事前书面约定</span></div><div class="commission-rate">1.5%<small>仅限平台实际参与询价、试单或履约协调的订单</small></div><p>示例：验收并结清的商品净货款¥50,000，对应服务费¥750。服务范围、付款方和费率须在服务开始前确认，履约完成并核对货款后结算。</p><div class="commission-boundary"><strong>净货款口径</strong><span>剔除退款及单列运费、税费；同一交付不与已购买的按次服务重复计费。商品交易额属于买卖双方，不计为平台收入。</span></div><a class="outline-button" href="#requests">查看采购需求 ↗</a></section>
       </div>
-      <section class="revenue-simulator" id="profit-scenario"><div class="panel-heading"><div><p class="section-kicker">Monthly scenario / 月度情景测算</p><h2>调整业务参数，查看收入与结余</h2><p>示例参数可编辑，结果按月估算。</p></div><span class="panel-note">情景测算 · 非财务预测</span></div><div class="scenario-layout"><div class="scenario-inputs"><label class="scenario-field">付费供应商数（家）<input id="scenario-suppliers" type="number" min="0" step="1" value="30"></label><label class="scenario-field">会员月费（元）<input id="scenario-price" type="number" min="0" step="10" value="299"></label><label class="scenario-field">确认成交订单数（笔/月）<input id="scenario-orders" type="number" min="0" step="1" value="8"></label><label class="scenario-field">平均成交金额（元/笔）<input id="scenario-order-value" type="number" min="0" step="1000" value="50000"></label><label class="scenario-field scenario-rate">成交服务费率 <output id="scenario-rate-value">1.5%</output><input id="scenario-rate" type="range" min="0" max="3" step="0.5" value="1.5"></label><label class="scenario-field">增值服务收入（元/月）<input id="scenario-services" type="number" min="0" step="500" value="10000"></label><label class="scenario-field">固定运营成本（元/月）<input id="scenario-costs" type="number" min="0" step="1000" value="20000"></label></div><aside class="scenario-results"><div><span>会员订阅收入</span><strong id="scenario-membership">—</strong></div><div><span>成交协同服务费</span><strong id="scenario-transaction">—</strong></div><div><span>增值服务收入</span><strong id="scenario-service-income">—</strong></div><div class="scenario-total"><span>月度收入合计</span><strong id="scenario-total">—</strong></div><div class="scenario-balance"><span>扣除固定运营成本后的月度结余</span><strong id="scenario-balance">—</strong></div></aside></div><p class="scenario-note">公式：供应商数 × 月费 + 成交订单数 × 平均成交金额 × 服务费率 + 增值服务收入 − 固定运营成本。尚未扣除税费、退款及按单交付成本；实际盈亏需依据真实签约、回款与成本核算。</p></section>
-      <section class="workspace-panel value-services"><div class="panel-heading"><div><p class="section-kicker">Export enablement / 专业服务协作</p><h2>按实际服务内容计费</h2></div><a class="dark-button" href="#services">查看服务中心 ↗</a></div><div class="value-service-grid">${services.map(([title, detail]) => `<article><span class="service-icon">服</span><h3>${esc(title)}</h3><p>${esc(detail)}</p><a class="mini-link" href="#service-request/${encodeURIComponent(title)}">提交服务需求 ↗</a></article>`).join('')}</div><p class="business-footnote">平台可按实际交付内容收取协调或管理服务费，专业机构费用由服务方独立报价。需向客户披露服务关系和费用，不对专业结论作担保。</p></section>
-      <section class="cost-structure"><div class="panel-heading"><div><p class="section-kicker">Cost structure / 成本结构</p><h2>主要成本与收入相对应</h2></div></div><div class="cost-grid">${costs.map(([title, detail]) => `<article><strong>${esc(title)}</strong><span>${esc(detail)}</span></article>`).join('')}</div></section>
+      <section class="revenue-simulator" id="profit-scenario"><div class="panel-heading"><div><p class="section-kicker">Monthly operating scenarios / 月度经营情景</p><h2>收入扣除交付和运营成本后才是经营结果</h2><p>切换文档中的试运营与业务增长假设；可继续调整参数。</p></div><span class="panel-note">示例测算 · 未实现财务结果</span></div><div class="scenario-switch" role="group" aria-label="选择月度经营情景"><button type="button" class="active" data-scenario="pilot" aria-pressed="true">试运营情景</button><button type="button" data-scenario="growth" aria-pressed="false">业务增长情景</button></div><div class="scenario-layout"><div class="scenario-inputs"><label class="scenario-field">付费会员（家）<input id="scenario-suppliers" type="number" min="0" step="1" value="30"></label><label class="scenario-field">会员月费（元）<input id="scenario-price" type="number" min="0" step="10" value="299"></label><label class="scenario-field">月订单（笔）<input id="scenario-orders" type="number" min="0" step="1" value="8"></label><label class="scenario-field">每笔商品净货款（元）<input id="scenario-order-value" type="number" min="0" step="1000" value="50000"></label><label class="scenario-field">成交服务费率 <output id="scenario-rate-value">1.5%</output><input id="scenario-rate" type="range" min="0" max="3" step="0.1" value="1.5"></label><label class="scenario-field">资料准备包（项/月）<input id="scenario-packages" type="number" min="0" step="1" value="10"></label><label class="scenario-field">资料包价格（元/项）<input id="scenario-package-price" type="number" min="0" step="100" value="1000"></label><label class="scenario-field">固定运营成本（元/月）<input id="scenario-costs" type="number" min="0" step="1000" value="20000"></label></div><aside class="scenario-results"><div><span>会员订阅</span><strong id="scenario-membership">—</strong></div><div><span>成交服务费</span><strong id="scenario-transaction">—</strong></div><div><span>资料包服务</span><strong id="scenario-service-income">—</strong></div><div class="scenario-total"><span>平台服务收入合计</span><strong id="scenario-total">—</strong></div><div><span>交付与渠道等变动成本</span><strong id="scenario-variable-costs">—</strong></div><div><span>固定运营成本</span><strong id="scenario-fixed-costs">—</strong></div><div class="scenario-balance"><span>月度经营结果</span><strong id="scenario-balance">—</strong></div></aside></div><p class="scenario-note" id="scenario-assumption-note">试运营假设：30家会员、8笔订单、每笔净货款¥50,000、10份资料包；经营结果约为亏损¥5,429。按当前其余假设，会员约54家时接近盈亏平衡。</p><p class="scenario-note">变动成本假设：会员交付¥60 / 家 / 月、订单协同¥300 / 笔、资料包交付¥450 / 项、成交服务费的20%用于渠道支出、总服务收入的2%作为退款坏账预留。经营结果 = 平台服务收入 − 变动成本 − 固定运营成本；不含税费和一次性开发投入。</p></section>
+      <section class="cost-structure"><div class="panel-heading"><div><p class="section-kicker">Cost structure / 成本结构</p><h2>按真实交付控制成本</h2></div></div><div class="cost-grid">${costs.map(([title, detail]) => `<article><strong>${esc(title)}</strong><span>${esc(detail)}</span></article>`).join('')}</div></section>
+      <section class="workspace-panel validation-plan"><div class="panel-heading"><div><p class="section-kicker">First 90 days / 九十天验证计划</p><h2>用回款、验收和续费验证商业假设</h2></div></div><div class="milestone-grid">${milestones.map(([month, action, result]) => `<article><span>${esc(month)}</span><strong>${esc(action)}</strong><p>${esc(result)}</p></article>`).join('')}</div><p class="business-footnote">以上为验证目标而非已达成结果。没有达成时，应按真实回款调整服务或缩减投入，不以意向订单、免费试用和演示记录代替经营成果。</p></section>
+      <div class="business-disclaimer lean-boundary"><strong>轻资产与服务边界</strong><span>平台侧重资料整理、需求对接和进度跟进；不囤货、不垫资。买家向卖方或出口主体支付货款，平台只收取自身服务费。供货、出口、运输、检测与认证由相应签约主体或专业机构负责。正式收费前须明确签约、收款、开票主体并落实客户授权。</span></div>
       <div class="business-actions"><a class="outline-button" href="#supplier">进入供应商工作台</a><a class="dark-button" href="#buyer">进入采购方工作台</a></div></div>`;
   }
   function channelsPage() {
@@ -336,25 +340,57 @@
   function bindRevenueScenario() {
     const root = document.getElementById('profit-scenario');
     if (!root) return;
-    const currency = value => `¥${new Intl.NumberFormat('zh-CN', { maximumFractionDigits: 0 }).format(Math.round(value))}`;
+    const currency = value => `${value < 0 ? '−' : ''}¥${new Intl.NumberFormat('zh-CN', { maximumFractionDigits: 0 }).format(Math.round(Math.abs(value)))}`;
+    const presets = {
+      pilot: { suppliers: 30, price: 299, orders: 8, orderValue: 50000, rate: 1.5, packages: 10, packagePrice: 1000, costs: 20000 },
+      growth: { suppliers: 60, price: 299, orders: 15, orderValue: 60000, rate: 1.5, packages: 15, packagePrice: 1000, costs: 26000 }
+    };
     const update = () => {
       const value = id => Math.max(0, Number(document.getElementById(id)?.value) || 0);
       const membership = value('scenario-suppliers') * value('scenario-price');
       const rate = value('scenario-rate');
       const transaction = value('scenario-orders') * value('scenario-order-value') * rate / 100;
-      const service = value('scenario-services');
+      const service = value('scenario-packages') * value('scenario-package-price');
       const total = membership + transaction + service;
-      const balance = total - value('scenario-costs');
+      const variable = value('scenario-suppliers') * 60 + value('scenario-orders') * 300 + value('scenario-packages') * 450 + transaction * 0.2 + total * 0.02;
+      const fixed = value('scenario-costs');
+      const balance = total - variable - fixed;
       document.getElementById('scenario-rate-value').textContent = `${rate}%`;
       document.getElementById('scenario-membership').textContent = currency(membership);
       document.getElementById('scenario-transaction').textContent = currency(transaction);
       document.getElementById('scenario-service-income').textContent = currency(service);
       document.getElementById('scenario-total').textContent = currency(total);
+      document.getElementById('scenario-variable-costs').textContent = currency(variable);
+      document.getElementById('scenario-fixed-costs').textContent = currency(fixed);
       const balanceNode = document.getElementById('scenario-balance');
       balanceNode.textContent = currency(balance);
       balanceNode.classList.toggle('negative', balance < 0);
+      const note = document.getElementById('scenario-assumption-note');
+      const matchesPreset = preset => Object.entries({ suppliers: 'scenario-suppliers', price: 'scenario-price', orders: 'scenario-orders', orderValue: 'scenario-order-value', rate: 'scenario-rate', packages: 'scenario-packages', packagePrice: 'scenario-package-price', costs: 'scenario-costs' }).every(([key, id]) => Number(document.getElementById(id).value) === preset[key]);
+      if (matchesPreset(presets.pilot)) note.textContent = `试运营情景月度经营结果约为${currency(balance)}（亏损）；按资料包、订单量和成本假设不变，约54家付费会员接近盈亏平衡。`;
+      else if (matchesPreset(presets.growth)) note.textContent = `业务增长情景月度经营结果约为${currency(balance)}（盈利）；同时假设订单、资料包和固定成本同步增长。`;
+      else note.textContent = `自定义情景月度经营结果约为${currency(balance)}。盈亏平衡取决于会员续费、真实回款、服务交付工时与成本控制。`;
+      return { membership, transaction, service, total, variable, fixed, balance };
     };
-    root.addEventListener('input', update);
+    root.addEventListener('input', () => {
+      root.querySelectorAll('[data-scenario]').forEach(option => {
+        option.classList.remove('active');
+        option.setAttribute('aria-pressed', 'false');
+      });
+      update();
+    });
+    root.querySelectorAll('[data-scenario]').forEach(button => button.addEventListener('click', () => {
+      const preset = presets[button.dataset.scenario];
+      if (!preset) return;
+      const ids = { suppliers: 'scenario-suppliers', price: 'scenario-price', orders: 'scenario-orders', orderValue: 'scenario-order-value', rate: 'scenario-rate', packages: 'scenario-packages', packagePrice: 'scenario-package-price', costs: 'scenario-costs' };
+      Object.entries(ids).forEach(([key, id]) => { document.getElementById(id).value = preset[key]; });
+      root.querySelectorAll('[data-scenario]').forEach(option => {
+        const active = option === button;
+        option.classList.toggle('active', active);
+        option.setAttribute('aria-pressed', String(active));
+      });
+      update();
+    }));
     update();
   }
 

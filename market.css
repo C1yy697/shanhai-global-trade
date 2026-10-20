@@ -393,6 +393,37 @@ table th, table td { text-align: center; vertical-align: middle; }
 .scenario-balance strong { color: var(--forest); font-size: 22px; }
 .scenario-balance strong.negative { color: #a54e43; }
 .scenario-note { margin: 13px 0 0; color: #78847d; font-size: 12px; line-height: 1.65; }
+.revenue-offers, .validation-plan { margin-top: 22px; }
+.revenue-offers .panel-heading > div > p:not(.section-kicker) { max-width: 680px; margin: 7px 0 0; color: var(--muted); font-size: 13px; line-height: 1.65; }
+.offer-grid { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 16px; }
+.offer-grid article { display: grid; grid-template-rows: auto 1fr auto; gap: 10px; min-width: 0; padding: 15px; border: 1px solid #e2e8e1; border-radius: 6px; background: #fbfcfa; }
+.offer-heading { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 7px; }
+.offer-heading h3 { margin: 0; color: var(--deep); font-size: 16px; }
+.offer-heading strong { color: #28674d; font-size: 17px; }
+.offer-grid article > p { margin: 0; color: var(--muted); font-size: 13px; line-height: 1.65; }
+.revenue-stream-columns { align-items: stretch; }
+.membership-offer { padding: 18px; border: 1px solid #dfe7df; border-radius: 7px; background: #fff; }
+.membership-offer .panel-heading { align-items: start; margin-bottom: 12px; }
+.membership-offer h2, .commission-offer h2 { margin: 0; color: var(--deep); font-size: 20px; }
+.membership-includes { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 10px; margin: 0 0 14px; padding: 0; list-style: none; }
+.membership-includes li { padding: 11px; border-left: 2px solid #8caf92; background: #f6f9f5; color: #526459; font-size: 13px; line-height: 1.55; }
+.membership-offer > p, .commission-offer > p { color: var(--muted); font-size: 13px; line-height: 1.7; }
+.free-access-note, .commission-boundary { display: grid; gap: 4px; margin-top: 14px; padding: 12px; border-radius: 5px; background: #f4f7f3; color: #53675a; font-size: 13px; line-height: 1.6; }
+.free-access-note strong, .commission-boundary strong { color: var(--deep); }
+.commission-offer { height: 100%; }
+.commission-offer .commission-rate { font-size: 32px; }
+.scenario-switch { display: inline-flex; gap: 4px; margin: 4px 0 16px; padding: 4px; border: 1px solid #dce5dc; border-radius: 6px; background: #f5f8f4; }
+.scenario-switch button { min-height: 36px; padding: 7px 13px; border: 0; border-radius: 4px; background: transparent; color: #526459; font: inherit; font-size: 13px; cursor: pointer; }
+.scenario-switch button.active { background: var(--forest); color: #fff; }
+.scenario-results > div:nth-child(5), .scenario-results > div:nth-child(6) { background: #f5f6f3; }
+.validation-plan .panel-heading { margin-bottom: 14px; }
+.milestone-grid { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 14px; }
+.milestone-grid article { display: grid; align-content: start; gap: 8px; min-width: 0; padding: 14px; border-top: 2px solid #8caf92; background: #f8faf7; }
+.milestone-grid article > span { color: #8a6a39; font-size: 13px; font-weight: 700; }
+.milestone-grid article > strong { color: var(--deep); font-size: 14px; line-height: 1.55; }
+.milestone-grid article > p { margin: 0; color: var(--muted); font-size: 13px; line-height: 1.6; }
+.lean-boundary { margin-top: 22px; }
+.lean-boundary strong { min-width: 145px; }
 .cost-structure { margin-top: 26px; padding: 18px 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
 .cost-structure .panel-heading { margin-bottom: 13px; }
 .cost-structure .panel-heading h2 { margin: 0; color: var(--deep); font-size: 19px; }
@@ -450,6 +481,9 @@ small, .hero-note, .site-footer small, .assistant-status, .assistant-messages, .
   .calendar-grid { grid-template-columns: repeat(2, minmax(0,1fr)); }
   .service-grid { grid-template-columns: 1fr; }
   .business-columns { grid-template-columns: 1fr; }
+  .offer-grid { grid-template-columns: 1fr; }
+  .membership-includes { grid-template-columns: 1fr; }
+  .milestone-grid { grid-template-columns: 1fr; }
   .scenario-layout { grid-template-columns: 1fr; }
   .scenario-inputs { grid-template-columns: repeat(2,minmax(0,1fr)); }
   .cost-grid { grid-template-columns: repeat(2,minmax(0,1fr)); }
@@ -500,6 +534,8 @@ small, .hero-note, .site-footer small, .assistant-status, .assistant-messages, .
   .business-disclaimer { display: block; }
   .business-disclaimer strong { display: block; margin-bottom: 4px; }
   .business-actions { display: grid; grid-template-columns: 1fr; }
+  .scenario-switch { display: grid; grid-template-columns: 1fr 1fr; width: 100%; }
+  .scenario-switch button { padding-inline: 6px; }
   .scenario-inputs { grid-template-columns: 1fr 1fr; gap: 9px; }
   .scenario-results { grid-template-columns: 1fr 1fr; }
   .scenario-results strong { font-size: 16px; }
