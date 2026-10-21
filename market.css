@@ -1369,3 +1369,21 @@ body.agent-route-active #market-root { min-height: 100dvh; }
   .assistant-message { font-size: 13px; }
   .assistant-prompts button { min-height: 34px; padding-inline: 9px; font-size: 11px; }
 }
+
+/* Reference-home finish: brighter coastal scene, heavier brush title and a taller assistant card. */
+@media (min-width: 901px) {
+  .site-header { height: 92px; }
+  .site-brand { min-width: 224px; }
+  .site-nav > a, .nav-menu summary { min-height: 54px; border-radius: 9px; font-size: 15px; }
+  .hero { min-height: min(820px, calc(100dvh - 92px)); grid-template-columns: minmax(0, 1.06fr) minmax(410px, .94fr); padding-block: 42px; }
+  .hero::after { background-image: linear-gradient(180deg, rgba(125,193,231,.34) 0%, rgba(255,255,255,0) 34%), url("assets/hero-bayberry.jpg"); background-position: 56% 43%; filter: saturate(1.38) contrast(1.1) brightness(1.08); }
+  .hero::before { background: linear-gradient(90deg, rgba(247,247,242,.8) 0%, rgba(247,247,242,.68) 28%, rgba(247,247,242,.34) 48%, rgba(247,247,242,.06) 76%, rgba(247,247,242,0) 100%); }
+  .hero-copy::before { background: linear-gradient(120deg, rgba(249,249,243,.82), rgba(249,249,243,.38)); }
+  .hero h1 { font-weight: 900; -webkit-text-stroke: 1.45px currentColor; text-shadow: 0 2px 0 rgba(255,255,255,.7), 0 9px 24px rgba(255,255,255,.28); }
+  .hero h1 em { -webkit-text-stroke: .8px currentColor; }
+  .hero-agent-card { width: min(100%, 500px); min-height: min(720px, calc(100dvh - 132px)); display: flex; flex-direction: column; border-radius: 22px; box-shadow: 0 24px 68px rgba(28,54,39,.25); }
+  .hero-agent-card > header { min-height: 94px; padding: 17px 21px; }
+  .hero-agent-card > header img { width: 64px; height: 64px; }
+  .hero-agent-thread { flex: 1 1 auto; align-content: start; padding: 22px; }
+  .hero-agent-card > footer { min-height: 68px; padding: 12px 20px; }
+}
