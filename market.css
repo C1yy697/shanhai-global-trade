@@ -1379,7 +1379,7 @@ body.agent-route-active #market-root { min-height: 100dvh; }
 .home-page { max-width: none; }
 .home-page > .hero { min-height: clamp(680px, calc(100dvh - 92px), 900px); grid-template-columns: minmax(0, 1.12fr) minmax(390px, .88fr); align-items: center; align-content: center; gap: clamp(28px, 4vw, 72px); padding: 54px clamp(24px, 6vw, 96px); }
 .home-page > .hero::after { inset: 0; background-image: url("assets/hero-wenzhou-coast.jpg"); background-position: center 48%; filter: saturate(1.32) contrast(1.14) brightness(1.01); }
-.home-page > .hero::before { background: linear-gradient(90deg, rgba(255,254,249,.72) 0%, rgba(255,254,249,.46) 31%, rgba(255,254,249,.12) 54%, transparent 70%); }
+.home-page > .hero::before { background: linear-gradient(90deg, rgba(255,254,249,.42) 0%, rgba(255,254,249,.28) 31%, rgba(255,254,249,.06) 54%, transparent 70%); }
 .home-page .hero-copy { width: min(620px, 100%); max-width: 620px; margin-left: 0; padding: 0; }
 .home-page .hero-copy::before { display: none; }
 .hero-heading { width: min(620px, 100%); aspect-ratio: 599 / 241; margin: 0 0 22px; background: url("assets/hero-calligraphy-title.png") center / 114% auto no-repeat; font-size: 0; line-height: 0; }
@@ -1395,7 +1395,7 @@ body.agent-route-active #market-root { min-height: 100dvh; }
 @media (max-width: 720px) {
   .home-page > .hero { min-height: clamp(590px, calc(100dvh - 62px), 760px); align-content: start; padding: 58px 20px 36px; }
   .home-page > .hero::after { background-position: 58% center; filter: saturate(1.28) contrast(1.12) brightness(1.01); }
-  .home-page > .hero::before { background: linear-gradient(180deg, rgba(255,254,249,.14) 0%, rgba(255,254,249,.12) 30%, rgba(255,254,249,.3) 66%, rgba(255,254,249,.78) 100%); }
+  .home-page > .hero::before { background: linear-gradient(180deg, rgba(255,254,249,.14) 0%, rgba(255,254,249,.12) 30%, rgba(255,254,249,.34) 66%, rgba(255,254,249,.82) 100%); }
   .home-page .hero-copy { max-width: 540px; }
   .hero-heading { width: min(500px, 100%); margin-bottom: 17px; }
   .home-page .hero-search { height: 58px; padding-left: 14px; }
