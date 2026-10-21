@@ -1429,3 +1429,27 @@ body.agent-route-active #market-root { min-height: 100dvh; }
   .supplier-detail-list > div:not(.supplier-detail-heading) { display: grid; gap: 3px; }
   .supplier-detail-list > div:not(.supplier-detail-heading) span { text-align: left; }
 }
+
+/* The home page keeps the assistant in its dedicated launcher/workspace. */
+.home-page > .hero { grid-template-columns: minmax(0, 1fr); }
+.home-page > .hero .hero-copy { max-width: 760px; }
+.home-page > .hero .hero-agent-card { display: none !important; }
+.home-route-active #assistant-launcher,
+.home-route-active.hero-assistant-collapsed #assistant-launcher { display: inline-flex; }
+
+/* Match the compact reference navigation with a more readable desktop label size. */
+.site-nav > a,
+.site-nav > .workspace-link,
+.nav-menu,
+.nav-menu summary { font-size: 16px; }
+.site-nav > a,
+.nav-menu summary { min-height: 50px; }
+
+@media (max-width: 720px) {
+  .site-nav > a,
+  .site-nav > .workspace-link,
+  .nav-menu,
+  .nav-menu summary { font-size: 16px; }
+  .site-nav > a,
+  .nav-menu summary { min-height: 44px; }
+}
