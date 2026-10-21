@@ -1107,6 +1107,7 @@ body.agent-route-active #market-root { min-height: 100dvh; }
 .hero-assistant > header button { width: 36px; height: 36px; margin-left: auto; border: 1px solid #dce5dc; border-radius: 6px; background: #fff; color: #245842; font-size: 19px; }
 .hero-assistant > header button + button { margin-left: 0; }
 .home-route-active #assistant-launcher { display: none; }
+.assistant-dialog-open.home-route-active .hero-agent-card { visibility: hidden; }
 .hero-assistant-thread { display: grid; gap: 13px; padding: 16px; }
 .hero-assistant-message { max-width: 95%; padding: 11px 13px; border-radius: 8px; background: #f0f3ec; }
 .hero-assistant-message p { margin: 0; color: #34473b; font-size: 13px; line-height: 1.65; }
@@ -1197,4 +1198,132 @@ body.agent-route-active #market-root { min-height: 100dvh; }
   .assistant-trend { margin-left: 0; }
   .assistant-prompts { padding-bottom: 10px; }
   .assistant-prompts button { min-height: 38px; }
+}
+
+/* Homepage hero and the conversational assistant dialog. */
+.market-shell > .hero { max-width: none; }
+.hero {
+  min-height: min(720px, calc(100dvh - 76px));
+  grid-template-columns: minmax(0, 1.12fr) minmax(360px, .88fr);
+  gap: clamp(24px, 4vw, 60px);
+  padding: 48px clamp(24px, 5.5vw, 84px);
+}
+.hero::after { background-position: center 49%; }
+.hero::before { background: linear-gradient(90deg, rgba(247,247,242,.98) 0%, rgba(247,247,242,.94) 34%, rgba(247,247,242,.79) 49%, rgba(247,247,242,.2) 76%, rgba(247,247,242,.08) 100%); }
+.hero-copy { max-width: 660px; padding: 20px 0; }
+.hero h1 { max-width: 650px; font-size: clamp(48px, 5vw, 66px); }
+.hero h1 em { font-size: clamp(28px, 2.8vw, 36px); }
+.hero-copy > p { max-width: 540px; }
+.hero-agent-card {
+  width: min(100%, 450px);
+  justify-self: end;
+  overflow: hidden;
+  border: 1px solid rgba(194, 207, 194, .95);
+  border-radius: 9px;
+  background: rgba(255, 255, 252, .97);
+  box-shadow: 0 20px 54px rgba(28, 54, 39, .2);
+  color: var(--ink);
+  backdrop-filter: blur(8px);
+}
+.hero-agent-card > header { min-height: 78px; display: flex; align-items: center; gap: 12px; padding: 13px 17px; border-bottom: 1px solid #e5eae3; }
+.hero-agent-card > header img { width: 50px; height: 50px; flex: 0 0 auto; border: 1px solid #e3e9df; border-radius: 50%; object-fit: cover; }
+.hero-agent-card > header > span:nth-of-type(1) { min-width: 0; display: grid; gap: 3px; }
+.hero-agent-card > header strong { color: #173f32; font-size: 18px; }
+.hero-agent-card > header small { color: #69786e; font-size: 12px; }
+.hero-agent-status { display: inline-flex; align-items: center; gap: 6px; margin-left: auto; color: #64776b; font-size: 11px; white-space: nowrap; }
+.hero-note button { padding: 0; border: 0; background: transparent; color: var(--forest); font: inherit; font-weight: 700; }
+.hero-note button:hover { text-decoration: underline; text-underline-offset: 3px; }
+.hero-agent-status i, .assistant-head-status i { width: 7px; height: 7px; display: inline-block; border-radius: 50%; background: #4d9a69; }
+.hero-agent-thread { display: grid; gap: 15px; padding: 18px; }
+.hero-agent-greeting { display: grid; gap: 3px; max-width: 96%; padding: 12px 14px; border-radius: 7px; background: #f0f3ec; }
+.hero-agent-greeting p { margin: 0; color: #34473b; font-size: 14px; line-height: 1.65; }
+.hero-agent-prompts { display: flex; flex-wrap: wrap; gap: 8px; padding-left: 46px; }
+.hero-agent-prompts button { min-height: 36px; padding: 6px 11px; border: 1px solid #cbd8cb; border-radius: 18px; background: #fff; color: #285641; font-size: 12px; font-weight: 600; }
+.hero-agent-prompts button:hover, .hero-agent-sample button:hover { border-color: #89a990; background: #eef5ed; }
+.hero-agent-sample { display: grid; gap: 7px; padding: 12px 0 0 46px; border-top: 1px solid #edf0eb; }
+.hero-agent-sample > span { color: #7b897f; font-size: 11px; }
+.hero-agent-sample button { min-height: 42px; display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 8px 11px; border: 1px solid #dce5dc; border-radius: 5px; background: #fff; color: #315144; text-align: left; font-size: 12px; line-height: 1.5; }
+.hero-agent-sample button b { flex: 0 0 auto; color: #175941; font-size: 17px; }
+.hero-agent-card > footer { display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 60px; padding: 10px 15px; border-top: 1px solid #e7ebe5; }
+.hero-agent-card > footer span { max-width: 230px; color: #78847c; font-size: 11px; line-height: 1.5; }
+.hero-agent-card > footer button { flex: 0 0 auto; min-height: 38px; display: inline-flex; align-items: center; gap: 7px; padding: 0 13px; border: 0; border-radius: 5px; background: #14583f; color: #fff; font-size: 12px; font-weight: 700; }
+.home-route-active #assistant-launcher { display: none; }
+.assistant-panel {
+  top: 50%;
+  right: clamp(18px, 2.2vw, 36px);
+  bottom: auto;
+  width: min(470px, calc(100vw - 36px));
+  height: min(720px, calc(100dvh - 124px));
+  max-height: none;
+  border-color: #cbd7ca;
+  border-radius: 10px;
+  transform: translateY(calc(-50% + 16px));
+}
+.assistant-panel.open { transform: translateY(-50%); }
+.assistant-head { min-height: 78px; flex: 0 0 auto; align-items: center; padding: 12px 16px; background: #fffefb; }
+.assistant-head > div:first-child { gap: 12px; }
+.assistant-avatar { width: 50px; height: 50px; }
+.assistant-head strong { font-size: 18px; }
+.assistant-head small { margin-top: 3px; font-size: 12px; }
+.assistant-head-status { display: inline-flex; align-items: center; gap: 6px; margin-left: 10px; color: #718078; font-size: 11px; white-space: nowrap; }
+.assistant-head-actions { display: flex; align-items: center; gap: 5px; margin-left: auto; }
+.assistant-head-actions button { width: 34px; height: 34px; display: grid; place-items: center; border: 0; border-radius: 5px; background: transparent; color: #53645a; font-size: 22px; }
+.assistant-head-actions button:hover { background: #edf3ec; color: var(--forest); }
+.assistant-status { min-height: 37px; flex: 0 0 auto; justify-content: space-between; padding: 7px 17px; font-size: 11px; }
+.assistant-trend { color: #8a652b; }
+.assistant-messages { min-height: 0; max-height: none; flex: 1 1 auto; align-content: start; gap: 16px; padding: 18px 16px 12px; }
+.assistant-message-row { max-width: 100%; display: flex; align-items: flex-start; gap: 9px; }
+.assistant-message-row.agent { align-self: flex-start; }
+.assistant-message-row.user { align-self: flex-end; justify-content: flex-end; }
+.assistant-message-avatar { width: 34px; height: 34px; flex: 0 0 auto; border: 1px solid #e1e8de; border-radius: 50%; object-fit: cover; }
+.assistant-message-content { min-width: 0; display: grid; gap: 5px; }
+.assistant-message-content > small { color: #7a887e; font-size: 11px; }
+.assistant-message { width: fit-content; max-width: min(340px, 100%); padding: 11px 13px; border-radius: 7px; background: #f0f3ec; color: #33483b; font-size: 14px; line-height: 1.7; }
+.assistant-user-avatar { width: 31px; height: 31px; display: grid; flex: 0 0 auto; place-items: center; border-radius: 50%; background: #e6edf4; color: #31536f; font-size: 12px; }
+.assistant-message-row.user .assistant-message { background: #155b43; color: #fff; border-radius: 7px 7px 2px 7px; }
+.assistant-message-actions { display: flex; flex-wrap: wrap; gap: 7px; padding-left: 43px; }
+.assistant-prompts { flex: 0 0 auto; flex-wrap: wrap; gap: 7px; padding: 4px 16px 12px 59px; }
+.assistant-prompts button, .assistant-route-button { min-height: 36px; padding: 6px 11px; border: 1px solid #cbd8cb; border-radius: 18px; background: #fff; color: #285641; font-size: 12px; font-weight: 600; white-space: nowrap; }
+.assistant-prompts button:hover, .assistant-route-button:hover { border-color: #89a990; background: #eef5ed; }
+.assistant-precheck { flex: 0 0 auto; margin: 0 16px 10px; border-top: 1px solid #edf0eb; }
+.assistant-precheck summary { padding: 10px 1px 2px; color: #52665a; font-size: 12px; font-weight: 700; cursor: pointer; }
+.assistant-precheck[open] { max-height: 230px; overflow: auto; }
+.assistant-precheck[open] .assistant-visual { padding: 10px 0 4px; border: 0; background: transparent; }
+.assistant-form { flex: 0 0 auto; align-items: center; gap: 9px; padding: 10px 12px; border-top: 1px solid #e6ebe4; }
+.assistant-form input { min-height: 48px; padding: 10px 13px; border-color: #e0e6df; border-radius: 7px; background: #fbfcfa; font-size: 14px; }
+.assistant-form input:focus { border-color: #84a38a; background: #fff; }
+.assistant-form button { width: 44px; height: 44px; flex: 0 0 auto; border-radius: 50%; background: #14583f; font-size: 18px; }
+.assistant-footnote { flex: 0 0 auto; margin: 0; padding: 0 14px 10px; color: #8a958d; font-size: 10px; text-align: center; }
+@media (max-width: 900px) {
+  .hero { grid-template-columns: minmax(0, 1fr) minmax(320px, .86fr); gap: 20px; padding-inline: 28px; }
+  .hero h1 { font-size: 50px; }
+  .hero h1 em { font-size: 29px; }
+  .hero-agent-thread { padding: 14px; }
+  .hero-agent-prompts { padding-left: 0; }
+}
+@media (max-width: 720px) {
+  .hero { min-height: 0; grid-template-columns: minmax(0, 1fr); gap: 20px; padding: 32px 18px 30px; }
+  .hero::before { background: linear-gradient(180deg, rgba(247,247,242,.35) 0%, rgba(247,247,242,.76) 32%, rgba(247,247,242,.98) 58%, #f7f7f2 100%); }
+  .hero-copy { max-width: 620px; padding: 14px 0 0; }
+  .hero h1 { font-size: 44px; }
+  .hero h1 em { font-size: 27px; }
+  .hero-copy > p { font-size: 15px; }
+  .hero-agent-card { width: 100%; max-width: 520px; justify-self: center; }
+  .hero-agent-card > header { min-height: 68px; }
+  .assistant-panel { top: 74px; right: 10px; bottom: 12px; width: min(470px, calc(100vw - 20px)); height: auto; max-height: none; transform: translateY(16px); }
+  .assistant-panel.open { transform: translateY(0); }
+  .assistant-messages { min-height: 100px; padding: 14px 12px 10px; }
+  .assistant-prompts { padding: 3px 12px 10px; }
+  .assistant-precheck { margin-inline: 12px; }
+  .assistant-head-status { display: none; }
+}
+@media (max-width: 390px) {
+  .hero-agent-card > footer { align-items: flex-start; flex-direction: column; }
+  .hero-agent-card > footer span { max-width: none; }
+  .hero-agent-card > footer button { align-self: flex-end; }
+  .assistant-head { padding-inline: 12px; }
+  .assistant-head-actions button { width: 31px; }
+  .assistant-message-avatar { width: 30px; height: 30px; }
+  .assistant-message { font-size: 13px; }
+  .assistant-prompts button { min-height: 34px; padding-inline: 9px; font-size: 11px; }
 }
