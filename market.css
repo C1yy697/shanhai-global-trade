@@ -626,6 +626,8 @@ body.agent-route-active #market-root { min-height: 100dvh; }
 .agent-profile strong b { margin-left: 8px; padding: 5px 9px; border-radius: 15px; background: #fff1d9; color: #96641c; font-size: 12px; }
 .agent-profile small { margin-top: 4px; color: #77847d; font-size: 13px; }
 .agent-top-actions { display: flex; align-items: center; gap: 10px; }
+.agent-close { min-height: 36px; display: inline-flex; align-items: center; padding: 0 12px; border: 1px solid #cbd8cb; border-radius: 5px; color: #315144; text-decoration: none; font-size: 13px; font-weight: 600; white-space: nowrap; }
+.agent-close:hover { border-color: #89a990; background: #eef5ed; }
 .agent-top-actions button { min-height: 38px; padding: 0 12px; border: 1px solid transparent; border-radius: 6px; background: transparent; color: #334840; font-size: 13px; }
 .agent-top-actions button:hover, .agent-top-actions .agent-example-button { border-color: #e3e8e0; background: #f3f5f0; }
 .agent-columns { min-height: 0; display: grid; grid-template-columns: minmax(0,1fr) 310px; gap: 28px; padding: 0 clamp(20px,3vw,48px); }

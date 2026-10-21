@@ -231,6 +231,11 @@
   $('#agent-file').addEventListener('change', event => { const file = event.target.files?.[0]; if (file) window.alert(`${file.name} 仅在本机选择，演示站点不会上传文件。`); event.target.value = ''; });
 
   renderHistory();
-  if (conversations.length) openConversation(conversations[0].id);
+  const prompt = new URLSearchParams(window.location.search).get('prompt');
+  if (prompt) {
+    window.history.replaceState(null, '', window.location.pathname);
+    startNewConversation();
+    sendMessage(prompt);
+  } else if (conversations.length) openConversation(conversations[0].id);
   else startNewConversation();
 })();
