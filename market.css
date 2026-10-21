@@ -1226,12 +1226,12 @@ body.agent-route-active #market-root { min-height: 100dvh; }
   gap: clamp(24px, 4vw, 60px);
   padding: 48px clamp(24px, 5.5vw, 84px);
 }
-.hero::after { background-position: center 44%; filter: saturate(1.06) contrast(1.02); }
-.hero::before { background: linear-gradient(90deg, rgba(247,247,242,.88) 0%, rgba(247,247,242,.76) 28%, rgba(247,247,242,.5) 47%, rgba(247,247,242,.14) 73%, rgba(247,247,242,.02) 100%); }
+.hero::after { background-position: 56% 44%; filter: saturate(1.18) contrast(1.06) brightness(1.04); }
+.hero::before { background: linear-gradient(90deg, rgba(247,247,242,.92) 0%, rgba(247,247,242,.8) 27%, rgba(247,247,242,.46) 47%, rgba(247,247,242,.1) 73%, rgba(247,247,242,.01) 100%); }
 .hero-copy { position: relative; z-index: 0; max-width: 700px; padding: 42px 46px 42px 22px; }
 .hero-copy::before { content: ""; position: absolute; inset: -34px 8% -34px -84px; z-index: -1; border-radius: 0 54% 58% 0 / 0 44% 52% 0; background: linear-gradient(120deg, rgba(249, 249, 243, .72), rgba(249, 249, 243, .34)); box-shadow: 18px 0 42px rgba(45, 73, 53, .06); backdrop-filter: blur(1px); }
-.hero h1 { max-width: 700px; color: #0d4a39; font-family: "STKaiti", "KaiTi", "FZKai-Z03", "Noto Serif SC", "Songti SC", serif; font-size: clamp(56px, 6vw, 88px); font-weight: 700; line-height: 1.06; letter-spacing: .015em; text-shadow: 0 2px 0 rgba(255,255,255,.25); }
-.hero h1 em { font-size: clamp(31px, 3.25vw, 48px); letter-spacing: .04em; }
+.hero h1 { max-width: 700px; color: #064a39; font-family: "STKaiti", "KaiTi", "FZKai-Z03", "Noto Serif SC", "Songti SC", serif; font-size: clamp(60px, 6.4vw, 94px); font-weight: 700; line-height: 1.04; letter-spacing: .018em; text-shadow: 0 2px 0 rgba(255,255,255,.6), 0 8px 22px rgba(255,255,255,.2); }
+.hero h1 em { color: #a46816; font-size: clamp(33px, 3.4vw, 50px); letter-spacing: .045em; text-shadow: 0 2px 0 rgba(255,255,255,.55); }
 .hero-copy > p { max-width: 540px; }
 .hero-agent-card {
   width: min(100%, 450px);
@@ -1329,19 +1329,19 @@ body.agent-route-active #market-root { min-height: 100dvh; }
 .assistant-footnote { flex: 0 0 auto; margin: 0; padding: 0 14px 10px; color: #8a958d; font-size: 10px; text-align: center; }
 @media (max-width: 900px) {
   .hero { grid-template-columns: minmax(0, 1fr) minmax(320px, .86fr); gap: 20px; padding-inline: 28px; }
-  .hero h1 { font-size: 50px; }
-  .hero h1 em { font-size: 29px; }
+  .hero h1 { font-size: 54px; }
+  .hero h1 em { font-size: 31px; }
   .hero-agent-thread { padding: 14px; }
   .hero-agent-prompts { padding-left: 0; }
 }
 @media (max-width: 720px) {
   .hero { min-height: 0; grid-template-columns: minmax(0, 1fr); gap: 20px; padding: 32px 18px 30px; }
-  .hero::after { background-position: 64% center; filter: saturate(1.12) contrast(1.04) brightness(1.03); }
-  .hero::before { background: linear-gradient(180deg, rgba(247,247,242,.08) 0%, rgba(247,247,242,.12) 36%, rgba(247,247,242,.42) 72%, rgba(247,247,242,.86) 100%); }
+  .hero::after { background-position: 64% center; filter: saturate(1.2) contrast(1.07) brightness(1.04); }
+  .hero::before { background: linear-gradient(180deg, rgba(247,247,242,.05) 0%, rgba(247,247,242,.12) 34%, rgba(247,247,242,.38) 70%, rgba(247,247,242,.82) 100%); }
   .hero-copy { max-width: 620px; padding: 14px 0 0; }
   .hero-copy::before { inset: -20px -18px -18px -22px; border-radius: 0 0 42% 0; background: rgba(249, 249, 243, .34); box-shadow: none; backdrop-filter: blur(0); }
-  .hero h1 { color: #073f30; font-size: 46px; font-weight: 900; letter-spacing: .02em; text-shadow: 0 2px 0 rgba(255,255,255,.62), 0 7px 20px rgba(255,255,255,.28); }
-  .hero h1 em { color: #a56b17; font-size: 29px; text-shadow: 0 2px 0 rgba(255,255,255,.58); }
+  .hero h1 { color: #064a39; font-size: 48px; font-weight: 900; letter-spacing: .02em; text-shadow: 0 2px 0 rgba(255,255,255,.68), 0 7px 20px rgba(255,255,255,.34); }
+  .hero h1 em { color: #a46816; font-size: 30px; text-shadow: 0 2px 0 rgba(255,255,255,.62); }
   .hero-copy > p { font-size: 15px; }
   .hero-agent-card { width: 100%; max-width: 520px; justify-self: center; }
   .hero-agent-card > header { min-height: 68px; }
