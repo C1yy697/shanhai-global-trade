@@ -1336,11 +1336,12 @@ body.agent-route-active #market-root { min-height: 100dvh; }
 }
 @media (max-width: 720px) {
   .hero { min-height: 0; grid-template-columns: minmax(0, 1fr); gap: 20px; padding: 32px 18px 30px; }
-  .hero::before { background: linear-gradient(180deg, rgba(247,247,242,.35) 0%, rgba(247,247,242,.76) 32%, rgba(247,247,242,.98) 58%, #f7f7f2 100%); }
+  .hero::after { background-position: 64% center; filter: saturate(1.12) contrast(1.04) brightness(1.03); }
+  .hero::before { background: linear-gradient(180deg, rgba(247,247,242,.08) 0%, rgba(247,247,242,.12) 36%, rgba(247,247,242,.42) 72%, rgba(247,247,242,.86) 100%); }
   .hero-copy { max-width: 620px; padding: 14px 0 0; }
-  .hero-copy::before { inset: -20px -18px -18px -22px; border-radius: 0 0 42% 0; background: rgba(249, 249, 243, .72); box-shadow: none; }
-  .hero h1 { font-size: 44px; }
-  .hero h1 em { font-size: 27px; }
+  .hero-copy::before { inset: -20px -18px -18px -22px; border-radius: 0 0 42% 0; background: rgba(249, 249, 243, .34); box-shadow: none; backdrop-filter: blur(0); }
+  .hero h1 { color: #073f30; font-size: 46px; font-weight: 900; letter-spacing: .02em; text-shadow: 0 2px 0 rgba(255,255,255,.62), 0 7px 20px rgba(255,255,255,.28); }
+  .hero h1 em { color: #a56b17; font-size: 29px; text-shadow: 0 2px 0 rgba(255,255,255,.58); }
   .hero-copy > p { font-size: 15px; }
   .hero-agent-card { width: 100%; max-width: 520px; justify-self: center; }
   .hero-agent-card > header { min-height: 68px; }
