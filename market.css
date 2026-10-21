@@ -1378,7 +1378,7 @@ body.agent-route-active #market-root { min-height: 100dvh; }
 }
 .home-page { max-width: none; }
 .home-page > .hero { min-height: clamp(680px, calc(100dvh - 92px), 900px); grid-template-columns: minmax(0, 1.12fr) minmax(390px, .88fr); align-items: center; align-content: center; gap: clamp(28px, 4vw, 72px); padding: 54px clamp(24px, 6vw, 96px); }
-.home-page > .hero::after { inset: 0; background-image: url("assets/hero-wenzhou-coast.jpg"); background-position: center 54%; filter: saturate(1.16) contrast(1.1) brightness(1); }
+.home-page > .hero::after { inset: 0; background-image: url("assets/hero-wenzhou-coast-v2.png"); background-position: center 54%; filter: saturate(1.08) contrast(1.06) brightness(1); }
 .home-page > .hero::before { background: linear-gradient(90deg, rgba(255,254,249,.3) 0%, rgba(255,254,249,.18) 32%, rgba(255,254,249,.04) 56%, transparent 72%); }
 .home-page .hero-copy { width: min(620px, 100%); max-width: 620px; margin-left: 0; padding: 0; }
 .home-page .hero-copy::before { display: none; }
@@ -1394,7 +1394,7 @@ body.agent-route-active #market-root { min-height: 100dvh; }
 .home-route-active #assistant-launcher span { display: none; }
 @media (max-width: 720px) {
   .home-page > .hero { min-height: clamp(590px, calc(100dvh - 62px), 760px); align-content: start; padding: 58px 20px 36px; }
-  .home-page > .hero::after { background-position: 58% center; filter: saturate(1.14) contrast(1.08) brightness(1); }
+  .home-page > .hero::after { background-position: 58% center; filter: saturate(1.06) contrast(1.05) brightness(1); }
   .home-page > .hero::before { background: linear-gradient(180deg, rgba(255,254,249,.12) 0%, rgba(255,254,249,.1) 30%, rgba(255,254,249,.32) 66%, rgba(255,254,249,.8) 100%); }
   .home-page .hero-copy { max-width: 540px; }
   .hero-heading { width: min(470px, 100%); margin-bottom: 17px; }
