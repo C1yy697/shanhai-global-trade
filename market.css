@@ -1403,3 +1403,28 @@ body.agent-route-active #market-root { min-height: 100dvh; }
   .home-page .hero-actions > * { min-height: 50px; padding-inline: 12px; border-radius: 8px; font-size: 14px; }
   .home-route-active #assistant-launcher { right: 14px; bottom: 14px; }
 }
+
+/* Product cards show more than one verified-origin candidate without hiding the primary actions. */
+.product-supplier-list { display: grid; gap: 6px; margin-top: 10px; padding-top: 9px; border-top: 1px solid #edf0eb; }
+.product-supplier-list > strong { color: #344d40; font-size: 11px; }
+.supplier-list-items { display: grid; gap: 5px; }
+.supplier-list-items > span { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: baseline; gap: 7px; min-width: 0; }
+.supplier-list-items b { min-width: 0; overflow: hidden; color: #3c5548; font-size: 11px; font-weight: 600; text-overflow: ellipsis; white-space: nowrap; }
+.supplier-list-items small { color: #78867d; font-size: 10px; white-space: nowrap; }
+.booklet-suppliers { margin: 4px 0 14px; padding-top: 10px; }
+.booklet-suppliers .supplier-list-items > span { grid-template-columns: minmax(0, 1fr); gap: 1px; }
+.booklet-suppliers .supplier-list-items small { white-space: normal; }
+.supplier-detail-list { margin-top: 15px; padding: 13px; border: 1px solid #dce7dc; border-radius: 7px; background: #f6faf4; }
+.supplier-detail-heading { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 9px; color: #2e513e; font-size: 12px; }
+.supplier-detail-heading span { color: #8a6a2c; font-size: 10px; }
+.supplier-detail-list > div:not(.supplier-detail-heading) { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; padding: 8px 0; border-top: 1px solid #e4eee4; }
+.supplier-detail-list > div:not(.supplier-detail-heading) strong { color: #3b5547; font-size: 12px; }
+.supplier-detail-list > div:not(.supplier-detail-heading) span { color: #708077; font-size: 11px; text-align: right; }
+@media (max-width: 680px) {
+  .product-supplier-list { margin-top: 8px; padding-top: 7px; }
+  .supplier-list-items > span { grid-template-columns: minmax(0, 1fr); gap: 1px; }
+  .supplier-list-items b { font-size: 12px; }
+  .supplier-list-items small { font-size: 11px; white-space: normal; }
+  .supplier-detail-list > div:not(.supplier-detail-heading) { display: grid; gap: 3px; }
+  .supplier-detail-list > div:not(.supplier-detail-heading) span { text-align: left; }
+}
