@@ -1378,11 +1378,11 @@ body.agent-route-active #market-root { min-height: 100dvh; }
 }
 .home-page { max-width: none; }
 .home-page > .hero { min-height: clamp(680px, calc(100dvh - 92px), 900px); grid-template-columns: minmax(0, 1.12fr) minmax(390px, .88fr); align-items: center; align-content: center; gap: clamp(28px, 4vw, 72px); padding: 54px clamp(24px, 6vw, 96px); }
-.home-page > .hero::after { inset: 0; background-image: url("assets/hero-wenzhou-coast.jpg"); background-position: center 48%; filter: saturate(1.12) contrast(1.04) brightness(1.02); }
-.home-page > .hero::before { background: linear-gradient(90deg, rgba(255,254,249,.66) 0%, rgba(255,254,249,.4) 34%, rgba(255,254,249,.08) 61%, transparent 100%); }
+.home-page > .hero::after { inset: 0; background-image: url("assets/hero-wenzhou-coast.jpg"); background-position: center 48%; filter: saturate(1.32) contrast(1.14) brightness(1.01); }
+.home-page > .hero::before { background: linear-gradient(90deg, rgba(255,254,249,.72) 0%, rgba(255,254,249,.46) 31%, rgba(255,254,249,.12) 54%, transparent 70%); }
 .home-page .hero-copy { width: min(620px, 100%); max-width: 620px; margin-left: 0; padding: 0; }
 .home-page .hero-copy::before { display: none; }
-.hero-heading { width: min(620px, 100%); aspect-ratio: 599 / 241; margin: 0 0 22px; background: url("assets/hero-calligraphy-title.png") center / 112% auto no-repeat; font-size: 0; line-height: 0; }
+.hero-heading { width: min(620px, 100%); aspect-ratio: 599 / 241; margin: 0 0 22px; background: url("assets/hero-calligraphy-title.png") center / 114% auto no-repeat; font-size: 0; line-height: 0; }
 .visually-hidden { position: absolute !important; width: 1px !important; height: 1px !important; padding: 0 !important; margin: -1px !important; overflow: hidden !important; clip: rect(0,0,0,0) !important; white-space: nowrap !important; border: 0 !important; }
 .home-page .hero-search { width: min(560px, 100%); height: 66px; border-radius: 12px; padding-left: 20px; }
 .home-page .hero-search button { height: 54px; min-width: 118px; border-radius: 9px; font-size: 17px; }
@@ -1394,8 +1394,8 @@ body.agent-route-active #market-root { min-height: 100dvh; }
 .home-route-active #assistant-launcher span { display: none; }
 @media (max-width: 720px) {
   .home-page > .hero { min-height: clamp(590px, calc(100dvh - 62px), 760px); align-content: start; padding: 58px 20px 36px; }
-  .home-page > .hero::after { background-position: 58% center; filter: saturate(1.12) contrast(1.05) brightness(1.02); }
-  .home-page > .hero::before { background: linear-gradient(180deg, rgba(255,254,249,.18) 0%, rgba(255,254,249,.16) 30%, rgba(255,254,249,.34) 66%, rgba(255,254,249,.84) 100%); }
+  .home-page > .hero::after { background-position: 58% center; filter: saturate(1.28) contrast(1.12) brightness(1.01); }
+  .home-page > .hero::before { background: linear-gradient(180deg, rgba(255,254,249,.14) 0%, rgba(255,254,249,.12) 30%, rgba(255,254,249,.3) 66%, rgba(255,254,249,.78) 100%); }
   .home-page .hero-copy { max-width: 540px; }
   .hero-heading { width: min(500px, 100%); margin-bottom: 17px; }
   .home-page .hero-search { height: 58px; padding-left: 14px; }
