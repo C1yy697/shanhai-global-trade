@@ -1436,6 +1436,8 @@ body.agent-route-active #market-root { min-height: 100dvh; }
 .home-page > .hero .hero-agent-card { display: none !important; }
 .home-route-active #assistant-launcher,
 .home-route-active.hero-assistant-collapsed #assistant-launcher { display: inline-flex; }
+.home-route-active #assistant-launcher { width: 78px; height: 78px; min-height: 78px; padding: 6px; }
+.home-route-active #assistant-launcher .assistant-avatar { width: 64px; height: 64px; }
 
 /* Match the compact reference navigation with a more readable desktop label size. */
 .site-nav > a,
@@ -1452,4 +1454,6 @@ body.agent-route-active #market-root { min-height: 100dvh; }
   .nav-menu summary { font-size: 16px; }
   .site-nav > a,
   .nav-menu summary { min-height: 44px; }
+  .home-route-active #assistant-launcher { right: 14px; bottom: 14px; width: 78px; height: 78px; min-height: 78px; padding: 6px; }
+  .home-route-active #assistant-launcher .assistant-avatar { width: 64px; height: 64px; }
 }
